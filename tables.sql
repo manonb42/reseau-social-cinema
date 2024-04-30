@@ -54,29 +54,24 @@ CREATE TABLE Publications
 (
     publication_id INT PRIMARY KEY NOT NULL, 
     auteur_id INT NOT NULL, 
-    date_publication DATE NOT NULL, 
-    /*
-    discussion_id (obigatoire si premier niveau)
-    answer_ta_pub_id (obligatoire si second niveau)
-    sujet
-    imagine 
-    film_titre
-    artiste_id
-    ...
-    */
-    FOREIGN KEY (auteur_id) REFERENCES Utilisateurs(u_id)
+    date_publication DATETIME NOT NULL, 
+    discussion_id INT NOT NULL,
+    answer_to_publication_id INT, 
+    FOREIGN KEY (auteur_id) REFERENCES Utilisateurs(u_id), 
+    FOREIGN KEY (discussion_id) REFERENCES Discussions(discussion_id), 
+    FOREIGN KEY (answer_to_publication_id) REFERENCES Publications(publication_id)
     
 )
 
 CREATE TABLE Discussions
 (
-    discussions_id INT PRIMARY KEY NOT NULL, 
+    discussion_id INT PRIMARY KEY NOT NULL, 
     label VARCHAR(255) 
 )
 
 CREATE TABLE REACTION
 (
-    publication_id INT PRIMARY KEY NOT NULL,
+    publication_id INT NOT NULL,
     u_id INT PRIMARY KEY NOT NULL,
     r_type VARCHAR(255) NOT NULL, 
     FOREIGN KEY (u_id) REFERENCES Utilisateurs(u_id)
@@ -95,27 +90,26 @@ CREATE TABLE Participation
 CREATE TABLE Archives_web
 (
     event_id INT PRIMARY KEY NOT NULL, 
-    lien_web VARCHAR(255) PRIMARY KEY NOT NULL
+    lien_web VARCHAR(255) PRIMARY KEY NOT NULL, 
+    FOREIGN KEY (event_id) REFERENCES Evenements_Passes(event_id)
 )
-
 
 
 CREATE TABLE Evenements_Futurs 
 (
     event_id INT PRIMARY KEY NOT NULL, 
     nom VARCHAR(100) NOT NULL, 
-    date DATE, 
+    date DATETIME CHECK (DATEDIFF(CAST(NOW() AS DATETIME), date)<=0), /* verifier que ça marche*/
     lieu VARCHAR(255),
     nb_places INT,
     prix INT
-    /* CHECK DATE > AJD */
 )
 
 CREATE TABLE Evenements_Passes
 (
     event_id INT PRIMARY KEY NOT NULL, 
     nom VARCHAR(100) NOT NULL, 
-    date DATE, 
+    date DATETIME CHECK (DATEDIFF(CAST(NOW() AS DATETIME), date)>0), /* verifier que ça marche*/
     lieu VARCHAR(255),
     nb_participants INT
 )
