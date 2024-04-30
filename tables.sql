@@ -1,6 +1,6 @@
 CREATE TABLE Films
 (
-    titre VARCHAR(100) PRIMARY KEY NOT NULL,
+    titre VARCHAR(100) PRIMARY KEY,
     realisateur_id INT,
     date_sortie DATE,
     genre_id INT NOT NULL,
@@ -12,29 +12,31 @@ CREATE TABLE Films
 
 CREATE TABLE Genres
 (
-    genre_id INT PRIMARY KEY NOT NULL,
+    genre_id INT PRIMARY KEY,
     label VARCHAR(100)
 )
 
+/* est ce qu'elle est utile ? */
 CREATE TABLE Sous_genres
 (
-    sous_genre_id INT PRIMARY KEY NOT NULL,
+    sous_genre_id INT PRIMARY KEY,
+    /* genre_id */
     label VARCHAR(100)
 )
 
 CREATE TABLE Artistes
 (
-    artiste_id INT PRIMARY KEY NOT NULL,
+    artiste_id INT PRIMARY KEY,
     prenom VARCHAR(100) NOT NULL,
     nom VARCHAR(100) NOT NULL,
     date_naissance DATE, 
-    categorie_id INT 
+    categorie_id INT /* est ce qu'on garde int ? */
 )
 
 CREATE TABLE Utilisateurs
 (
-    u_id INT PRIMARY KEY NOT NULL,
-    categorie_id INT PRIMARY KEY NOT NULL, 
+    u_id INT PRIMARY KEY,
+    categorie_id INT, /* random, artiste .. */
     u_login VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     nom VARCHAR(100) NOT NULL, 
@@ -42,17 +44,18 @@ CREATE TABLE Utilisateurs
     mdp VARCHAR(100) NOT NULL, 
     pays VARCHAR(100), 
     date_naissance DATE
+    /* ajouter role_id */
 )
 
-CREATE TABLE Followers
+CREATE TABLE Follow
 (
-    u_id_followed INT PRIMARY KEY NOT NULL, 
-    u_id_following INT PRIMARY KEY NOT NULL
+    u_id_followers INT NOT NULL, 
+    u_id_following INT NOT NULL
 )
 
 CREATE TABLE Publications
 (
-    publication_id INT PRIMARY KEY NOT NULL, 
+    publication_id INT PRIMARY KEY, 
     auteur_id INT NOT NULL, 
     date_publication DATETIME NOT NULL, 
     discussion_id INT NOT NULL,
@@ -72,32 +75,33 @@ CREATE TABLE Discussions
 CREATE TABLE REACTION
 (
     publication_id INT NOT NULL,
-    u_id INT PRIMARY KEY NOT NULL,
+    u_id INT PRIMARY KEY,
     r_type VARCHAR(255) NOT NULL, 
     FOREIGN KEY (u_id) REFERENCES Utilisateurs(u_id)
 )
 
 CREATE TABLE Participation
 (
-    user_id INT PRIMARY KEY NOT NULL, 
-    event_id INT PRIMARY KEY NOT NULL, 
+    user_id INT, 
+    event_id INT, 
     inscrit INT, 
-    interesse INT, 
-    /* CHECK IF INSCRIT THEN !INTERESSE ELSE INTERESSE ? */
+    interesse INT, /* CHECK IF INSCRIT THEN !INTERESSE ELSE INTERESSE ? */
+    FOREIGN KEY (user_id) REFERENCES Utilisateurs(u_id), 
+    FOREIGN KEY (event_id) REFERENCES Evenements_Futurs(event_id)
 )
 
 
 CREATE TABLE Archives_web
 (
-    event_id INT PRIMARY KEY NOT NULL, 
-    lien_web VARCHAR(255) PRIMARY KEY NOT NULL, 
+    event_id INT NOT NULL, 
+    lien_web VARCHAR(255), 
     FOREIGN KEY (event_id) REFERENCES Evenements_Passes(event_id)
 )
 
 
 CREATE TABLE Evenements_Futurs 
 (
-    event_id INT PRIMARY KEY NOT NULL, 
+    event_id INT PRIMARY KEY, 
     nom VARCHAR(100) NOT NULL, 
     date DATETIME CHECK (DATEDIFF(CAST(NOW() AS DATETIME), date)<=0), /* verifier que ça marche*/
     lieu VARCHAR(255),
@@ -107,7 +111,7 @@ CREATE TABLE Evenements_Futurs
 
 CREATE TABLE Evenements_Passes
 (
-    event_id INT PRIMARY KEY NOT NULL, 
+    event_id INT PRIMARY KEY, 
     nom VARCHAR(100) NOT NULL, 
     date DATETIME CHECK (DATEDIFF(CAST(NOW() AS DATETIME), date)>0), /* verifier que ça marche*/
     lieu VARCHAR(255),
