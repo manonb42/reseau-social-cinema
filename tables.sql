@@ -7,7 +7,8 @@ CREATE TABLE Films
     sous_genre_id INT,
     FOREIGN KEY (genre_id) REFERENCES Genres(genre_id), 
     FOREIGN KEY (sous_genre_id) REFERENCES Sous_genres(sous_genre_id),
-    FOREIGN KEY (realisateur_id) REFERENCES Artistes(artiste_id)
+    FOREIGN KEY (realisateur_id) REFERENCES Artistes(artiste_id), 
+    UNIQUE(titre, realisateur_id)
 )
 
 CREATE TABLE Genres
@@ -35,7 +36,7 @@ CREATE TABLE Artistes
 
 CREATE TABLE Utilisateurs
 (
-    u_id INT PRIMARY KEY,
+    u_id SERIAL PRIMARY KEY,
     categorie_id INT, /* random, artiste .. */
     u_login VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
