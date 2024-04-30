@@ -16,7 +16,7 @@ CREATE TABLE Genres
     label VARCHAR(100)
 )
 
-/* est ce qu'elle est utile ? */
+/* est ce que c'est utile ? */
 CREATE TABLE Sous_genres
 (
     sous_genre_id INT PRIMARY KEY,
@@ -56,8 +56,8 @@ CREATE TABLE Follow
 CREATE TABLE Publications
 (
     publication_id INT PRIMARY KEY, 
-    auteur_id INT NOT NULL, 
     date_publication DATETIME NOT NULL, 
+    auteur_id INT NOT NULL, 
     discussion_id INT NOT NULL,
     answer_to_publication_id INT, 
     FOREIGN KEY (auteur_id) REFERENCES Utilisateurs(u_id), 
@@ -68,16 +68,17 @@ CREATE TABLE Publications
 
 CREATE TABLE Discussions
 (
-    discussion_id INT PRIMARY KEY NOT NULL, 
+    discussion_id INT PRIMARY KEY, 
     label VARCHAR(255) 
 )
 
 CREATE TABLE REACTION
 (
     publication_id INT NOT NULL,
-    u_id INT PRIMARY KEY,
+    u_id INT NOT NULL,
     r_type VARCHAR(255) NOT NULL, 
-    FOREIGN KEY (u_id) REFERENCES Utilisateurs(u_id)
+    FOREIGN KEY (u_id) REFERENCES Utilisateurs(u_id), 
+    FOREIGN KEY (publication_id) REFERENCES Publications(publication_id), 
 )
 
 CREATE TABLE Participation
@@ -98,6 +99,8 @@ CREATE TABLE Archives_web
     FOREIGN KEY (event_id) REFERENCES Evenements_Passes(event_id)
 )
 
+
+/* voir s'il vaut pas mieux faire de l'heritage de table pour les evenements */
 
 CREATE TABLE Evenements_Futurs 
 (
