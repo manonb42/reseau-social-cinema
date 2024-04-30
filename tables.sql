@@ -76,7 +76,8 @@ CREATE TABLE REACTION
 (
     publication_id INT NOT NULL,
     u_id INT NOT NULL,
-    r_type VARCHAR(255) NOT NULL, 
+    r_type VARCHAR(255) NOT NULL,
+    UNIQUE(publication_id, u_id, r_type), 
     FOREIGN KEY (u_id) REFERENCES Utilisateurs(u_id), 
     FOREIGN KEY (publication_id) REFERENCES Publications(publication_id), 
 )
