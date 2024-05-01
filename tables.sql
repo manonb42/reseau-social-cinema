@@ -22,7 +22,7 @@ CREATE TABLE Sous_genres
     sous_genre_id INT PRIMARY KEY,
     genre_id INT,
     label VARCHAR(100), 
-    FOREIGN KEY(genre_id) REFERENCES Genres(fenre_id)
+    FOREIGN KEY(genre_id) REFERENCES Genres(genre_id)
 )
 
 CREATE TABLE Artistes
