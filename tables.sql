@@ -17,12 +17,12 @@ CREATE TABLE Genres
     label VARCHAR(100)
 )
 
-/* est ce que c'est utile ? */
 CREATE TABLE Sous_genres
 (
     sous_genre_id INT PRIMARY KEY,
-    /* genre_id */
-    label VARCHAR(100)
+    genre_id INT,
+    label VARCHAR(100), 
+    FOREIGN KEY(genre_id) REFERENCES Genres(fenre_id)
 )
 
 CREATE TABLE Artistes
@@ -101,8 +101,6 @@ CREATE TABLE Archives_web
     FOREIGN KEY (event_id) REFERENCES Evenements_Passes(event_id)
 )
 
-
-/* voir s'il vaut pas mieux faire de l'heritage de table pour les evenements */
 
 CREATE TABLE Evenements_Futurs 
 (
