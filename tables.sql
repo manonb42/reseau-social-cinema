@@ -126,6 +126,7 @@ CREATE TABLE Archives_web
 (
     event_id INT NOT NULL, 
     lien_web VARCHAR(255), 
+    PRIMARY KEY(event_id, lien_web),
     FOREIGN KEY (event_id) REFERENCES Evenements_Passes(event_id)
 )
 
