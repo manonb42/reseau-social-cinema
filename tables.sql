@@ -4,19 +4,27 @@ CREATE TABLE Films
     titre VARCHAR(100),
     realisateur_id INT,
     date_sortie DATE,
-    sous_genre_id INT,
     FOREIGN KEY (genre_id) REFERENCES Genres(genre_id), 
     FOREIGN KEY (sous_genre_id) REFERENCES Sous_genres(sous_genre_id),
     FOREIGN KEY (realisateur_id) REFERENCES Artistes(artiste_id)
 )
 
-CREATE TABLE Films_Genres
+CREATE TABLE Films_Genres 
 (
     film_id INT,
     genre_id INT, 
     PRIMARY KEY(film_id, genre_id), 
     FOREIGN KEY(film_id) REFERENCES Films(film_id), 
     FOREIGN KEY(genre_id) REFERENCES Genres(genre_id)
+)
+
+CREATE TABLE Films_Sous_Genres
+(
+    film_id INT,
+    sous_genre_id INT, 
+    PRIMARY KEY(sous_genre_id, genre_id), 
+    FOREIGN KEY(sous_genre_id) REFERENCES Sous_genres(sous_genre_id), 
+    FOREIGN KEY(film_id) REFERENCES Films(film_id)
 )
 
 CREATE TABLE Genres
