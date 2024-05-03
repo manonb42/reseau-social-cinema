@@ -1,14 +1,22 @@
 CREATE TABLE Films
 (
-    titre VARCHAR(100) PRIMARY KEY,
+    film_id INT PRIMARY KEY, 
+    titre VARCHAR(100),
     realisateur_id INT,
     date_sortie DATE,
-    genre_id INT NOT NULL,
     sous_genre_id INT,
     FOREIGN KEY (genre_id) REFERENCES Genres(genre_id), 
     FOREIGN KEY (sous_genre_id) REFERENCES Sous_genres(sous_genre_id),
-    FOREIGN KEY (realisateur_id) REFERENCES Artistes(artiste_id), 
-    UNIQUE(titre, realisateur_id)
+    FOREIGN KEY (realisateur_id) REFERENCES Artistes(artiste_id)
+)
+
+CREATE TABLE Films_Genres
+(
+    film_id INT,
+    genre_id INT, 
+    PRIMARY KEY(film_id, genre_id), 
+    FOREIGN KEY(film_id) REFERENCES Films(film_id), 
+    FOREIGN KEY(genre_id) REFERENCES Genres(genre_id)
 )
 
 CREATE TABLE Genres
@@ -25,27 +33,46 @@ CREATE TABLE Sous_genres
     FOREIGN KEY(genre_id) REFERENCES Genres(genre_id)
 )
 
-CREATE TABLE Artistes
-(
-    artiste_id INT PRIMARY KEY,
-    prenom VARCHAR(100) NOT NULL,
-    nom VARCHAR(100) NOT NULL,
-    date_naissance DATE, 
-    categorie_id INT /* est ce qu'on garde int ? */
-)
-
 CREATE TABLE Utilisateurs
 (
     u_id SERIAL PRIMARY KEY,
-    categorie_id INT, /* random, artiste .. */
+    categorie_id VARCHAR(100), /* random, artiste .. */
     u_login VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     nom VARCHAR(100) NOT NULL, 
     prenom VARCHAR(100) NOT NULL, 
     mdp VARCHAR(100) NOT NULL, 
     pays VARCHAR(100), 
-    date_naissance DATE
-    /* ajouter role_id */
+    date_naissance DATE,
+    role_id VARCHAR(100) NOT NULL
+)
+
+CREATE TABLE Notation
+(
+    film_id INT,
+    u_id INT, 
+    note FLOAT NOT NULL,
+    PRIMARY KEY(film_id, u_id), 
+    FOREIGN KEY(film_id) REFERENCES Films(film_id), 
+    FOREIGN KEY(u_id) REFERENCES Utilisateurs(u_id)
+)
+
+CREATE TABLE Artistes
+(
+    artiste_id INT PRIMARY KEY,
+    prenom VARCHAR(100) NOT NULL,
+    nom VARCHAR(100) NOT NULL,
+    date_naissance DATE, 
+    categorie_id VARCHAR(100) NOT NULL
+)
+
+CREATE TABLE Casting
+(
+    film_id INT,
+    artiste_id INT, 
+    PRIMARY KEY(film_id, artiste_id), 
+    FOREIGN KEY(film_id) REFERENCES Films(film_id), 
+    FOREIGN KEY(artiste_id) REFERENCES Artistes(artiste_id) 
 )
 
 CREATE TABLE Follow
@@ -73,7 +100,7 @@ CREATE TABLE Discussions
     label VARCHAR(255) 
 )
 
-CREATE TABLE REACTION
+CREATE TABLE Reaction
 (
     publication_id INT NOT NULL,
     u_id INT NOT NULL,
@@ -89,6 +116,7 @@ CREATE TABLE Participation
     event_id INT, 
     inscrit INT, 
     interesse INT, /* CHECK IF INSCRIT THEN !INTERESSE ELSE INTERESSE ? */
+    PRIMARY KEY(user_id, event_id),
     FOREIGN KEY (user_id) REFERENCES Utilisateurs(u_id), 
     FOREIGN KEY (event_id) REFERENCES Evenements_Futurs(event_id)
 )
@@ -109,7 +137,7 @@ CREATE TABLE Evenements_Futurs
     date DATETIME CHECK (DATEDIFF(CAST(NOW() AS DATETIME), date)<=0), /* verifier que ça marche*/
     lieu VARCHAR(255),
     nb_places INT,
-    prix INT
+    prix FLOAT
 )
 
 CREATE TABLE Evenements_Passes
@@ -119,5 +147,23 @@ CREATE TABLE Evenements_Passes
     date DATETIME CHECK (DATEDIFF(CAST(NOW() AS DATETIME), date)>0), /* verifier que ça marche*/
     lieu VARCHAR(255),
     nb_participants INT
+)
+
+CREATE TABLE Annonces
+(
+    event_id INT,
+    discussion_id INT, 
+    PRIMARY KEY(event_id, discussion_id), 
+    FOREIGN KEY(event_id) REFERENCES Evenements_Futurs(event_id), 
+    FOREIGN KEY(discussion_id) REFERENCES Discussions(discussion_id)
+)
+
+CREATE TABLE Programme
+(
+    event_id INT,
+    film_id INT, 
+    PRIMARY KEY(event_id, film_id), 
+    FOREIGN KEY(event_id) REFERENCES Evenements_Futurs(event_id), 
+    FOREIGN KEY(film_id) REFERENCES Films(film_id)
 )
 
