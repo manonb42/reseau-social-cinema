@@ -2,22 +2,14 @@ create table Evenements
 (
 	e_id serial,
 	nom varchar(100),
-	date_event date not null,
+	debut_event timestamp not null,
+	fin_event timestamp not null, 
 	adresse varchar(255) not null,
 	prix float not null,
 	primary key(e_id),
 	unique (date_event, adresse)
 	--pas deux événements différents au même endroit le même jour
 
-)
-
-create table Archives_web -- entité faible de Evenements
-(
-	e_id int,
-	lien_web varchar(255) not null,
-	primary key(e_id, lien_web),
-	foreign key(e_id) references Evenements(e_id) on delete cascade
-	-- trigger evenement passé
 )
 
 
