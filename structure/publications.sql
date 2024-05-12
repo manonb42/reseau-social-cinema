@@ -24,7 +24,7 @@ create table Dialogue -- Publications et Publications
 
 --entité faible de Publications
 
-CREATE TYPE SMILEY AS ENUM ('sad', 'angry', 'shocked', 'disgusted', 'thumb', 'heart', 'lol');
+create type smiley as enum ('happy', 'sad', 'angry', 'shocked', 'disgusted', 'thumb', 'heart', 'lol');
 
 create table Reactions
 (
