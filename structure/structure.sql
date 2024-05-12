@@ -258,5 +258,4 @@ create table Dialogue -- Publications et Publications
 )
 	
 	
-	
 
