@@ -35,11 +35,11 @@ create table AvisEvenements --  Evenements et Utilisateurs
 (
 	e_id int,
 	u_id int,
-	mark float,
+	note float,
 	primary key(e_id, u_id),
 	foreign key(e_id) references Evenements(e_id) on delete cascade,
 	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
-	CHECK (mark >=0 AND mark<=5)
+	CHECK (note >=0 AND note<=5)
 	-- trigger evenement passé
 )
 
@@ -64,3 +64,31 @@ create table Organisateurs -- Utilisateurs et Evenements
 	foreign key(e_id) references Evenements(e_id) on delete cascade,
 	foreign key(organisateur) references Utilisateurs(u_id) on delete cascade
 )
+
+create table Localisation 
+(
+    localisation_id serial,
+    nom varchar(255) not null,
+    addresse varchar(255) not null,
+    ville_id integer not null,
+    capacite integer not null,
+    outside boolean default 'false', 
+	primary key(localisation_id),
+	foreign key (ville_id) references Villes(ville_id) on delete cascade
+);
+
+CREATE TABLE Pays 
+(
+    pays_id serial,
+    name varchar(255) not null, 
+	primary key (pays_id)
+);
+
+CREATE TABLE Villes 
+(
+    ville_id serial,
+    name varchar(255) not null,
+    pays__id integer not null, 
+	primary key (ville_id),
+	foreign key (pays_id) references Pays(pays_id) on delete cascade
+);
