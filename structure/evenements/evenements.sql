@@ -59,14 +59,13 @@ create table Organisateurs -- Utilisateurs et Evenements
 
 create table Localisation 
 (
-    localisation_id serial,
     nom varchar(255) not null,
-    addresse varchar(255) not null,
-    ville_id integer not null,
+    numero_rue varchar(255) not null,
+	ville varchar(255) not null,
+	pays varchar(255) not null,
     capacite integer not null,
-    outside boolean default 'false', 
-	primary key(localisation_id),
-	foreign key (ville_id) references Villes(ville_id) on delete cascade
+    outside boolean not null default 'false',
+	primary key(numero_rue, ville, pays)
 );
 
 CREATE TABLE Pays 
