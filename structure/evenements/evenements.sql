@@ -65,21 +65,6 @@ create table Localisation
 	pays varchar(255) not null,
     capacite integer not null,
     outside boolean not null default 'false',
-	primary key(numero_rue, ville, pays)
-);
-
-CREATE TABLE Pays 
-(
-    pays_id serial,
-    name varchar(255) not null, 
-	primary key (pays_id)
-);
-
-CREATE TABLE Villes 
-(
-    ville_id serial,
-    name varchar(255) not null,
-    pays__id integer not null, 
-	primary key (ville_id),
-	foreign key (pays_id) references Pays(pays_id) on delete cascade
+	primary key(numero_rue, ville, pays),
+	check capacite > 0
 );

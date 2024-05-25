@@ -1,46 +1,27 @@
 create table Utilisateurs
 (
 	u_id serial,
-	login varchar(100) unique not null,
+	pseudo varchar(100) unique not null,
 	email varchar(255) unique not null,
 	nom varchar(100) not null,
 	prenom varchar(100) not null,
-	password  varchar(100) not null,
-	birthdate date,
+	mdp  varchar(100) not null,
+	birth date,
 	pays varchar(100),
-	label varchar(100),
-	primary key(u_id),
-	foreign key(label) references Categories(label) on update cascade
+	bio varchar(100),
+	hierarchie roles not null,
+	primary key(u_id)
 );
 
--- entités faibles de Utilisateurs
-create table Admins(
-	u_id int
-	primary key(u_id),
-	foreign key(u_id) references Utilisateurs(u_id) on delete cascade
-);
-
-create table Moderateurs(
-	u_id int
-	primary key(u_id),
-	foreign key(u_id) references Utilisateurs(u_id) on delete cascade
-);
-
-----------
-
-create table Categories
-(
-	label varchar(100),
-	primary key(label)
-);
+create type roles as enum ('moderateur', 'admin', 'vip');
 
 create table Artistes
 (
 	a_id serial,
 	nom varchar(100) not null,
 	prenom varchar(100) not null,
+	birth date,
 	pays varchar(100),
-	birthdate date,
 	primary key(a_id)
 );
 
@@ -48,7 +29,7 @@ create table Films
 (
 	f_id serial,
 	titre varchar(100) not null,
-	realisateur int,
+	realisateur int not null,
 	date_sortie date,
 	primary key(f_id),
 	foreign key(realisateur) references Artistes(a_id)
@@ -58,7 +39,7 @@ create table Films
 create table Genres
 (
 	g_id serial,
-	label varchar(100) unique not null,
+	nom varchar(100) unique not null,
 	primary key(g_id)
 );
 
@@ -73,8 +54,8 @@ create table Discussions
 create table Publications
 (
 	p_id serial,
-	u_id int,
-	d_id int,
+	u_id int not null,
+	d_id int not null,
 	date_publication datetime not null,
 	primary key(p_id),
 	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
@@ -82,36 +63,52 @@ create table Publications
 );
 
 
-create type smiley as enum ('happy', 'sad', 'angry', 'shocked', 'disgusted', 'thumb', 'heart', 'lol');
+create type emojis as enum ('happy', 'sad', 'angry', 'shocked', 'disgusted', 'thumb', 'heart', 'lol');
 
+---- entité faible de Publications 
 create table Reactions
 (
-	u_id int,
-	p_id int,
-	emoji smiley not null,
+	u_id int not null,
+	p_id int not null,
+	emojis emoji not null,
 	primary key(u_id,p_id,emoji),
 	foreign key(u_id) references Utilisateurs(u_id) on delete set null,	
 );
 
-----------
 
 create table Evenements
 (
 	e_id serial,
 	nom varchar(100),
-	date_event date not null,
-	adresse varchar(255) not null,
+	debut date not null,
+	fin date not null,
 	prix float not null,
+	lieu integer not null
 	primary key(e_id),
-	unique (date_event, adresse)
-	--pas deux événements différents au même endroit le même jour
+	foreign key(lieu) references Lieux(id_l)
+	unique (debut, lieu),
+	CHECK (debut < fin && prix >=0)
+	--integrite : pour le même lieu, il ne peut pas y avoir deux événement dont les dates se superposent
 );
 
--- entité faible de Evenements
+create table Lieux
+(
+	id_l serial,
+	nom varchar(100),
+	adresse varchar(255) not null,
+	ville varchar(100) not null,
+	pays varchar(100) not null,
+	capacite integer,
+	outside boolean not null default 'false',
+	primary key(id_l),
+	unique (adresse, ville, pays),
+	CHECK (capacite >= 0)
+)
 
+-- entité faible de Evenements
 create table Archives_web
 (
-	e_id int,
+	e_id int not null,
 	lien_web varchar(255) not null,
 	primary key(e_id, lien_web),
 	foreign key(e_id) references Evenements(e_id) on delete cascade
@@ -250,6 +247,41 @@ create table Dialogue -- Publications et Publications
 	foreign key(reponse) references Publications(p_id) on delete cascade,
 	CHECK (source < reponse)
 );
+
+create table KeyWords
+(
+	mot varchar(255),
+	primary key(mot)
+);
+
+create table ArtistesKeyWords
+(
+	id_a integer not null,
+	mot varchar(255),
+	primary key(id_a, mot),
+	foreign key(id_a) references Artistes(id_a) on delete cascade,
+	foreign key(mot) references KeyWords(mot) on delete cascade
+);
+
+create table FilmsKeyWords
+(
+	id_f integer not null,
+	mot varchar(255),
+	primary key(id_a, mot),
+	foreign key(id_f) references Films(id_f) on delete cascade,
+	foreign key(mot) references KeyWords(mot) on delete cascade
+);
+
+create table EventKeyWords
+(
+	id_e integer not null,
+	mot varchar(255),
+	primary key(id_a, mot),
+	foreign key(id_e) references Evenements(id_e) on delete cascade,
+	foreign key(mot) references KeyWords(mot) on delete cascade
+);
+	
+	
 	
 	
 
