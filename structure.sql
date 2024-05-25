@@ -242,7 +242,7 @@ create table Relation -- Utilisateurs et Utilisateurs
 	CHECK (follower <> followed) -- si (A follow B) et (B Follow A) alors on peut dire que A et B sont amis
 );
 
-create table Dialogue -- Publications et Publications
+create table Conversation -- Publications et Publications
 (
 	source int, 
 	reponse int unique,
