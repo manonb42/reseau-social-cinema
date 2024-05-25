@@ -13,7 +13,7 @@ create table Utilisateurs
 	primary key(u_id)
 );
 
-create type roles as enum ('moderateur', 'admin', 'vip');
+create type roles as enum ('modérateur', 'admin', 'vip', 'certifié');
 
 create table Artistes --agissant dans le processus de développement du film
 (
@@ -147,7 +147,7 @@ create table FilmsGenres -- Films et Genres
 	foreign key(g_id) references Films(g_id) on delete cascade
 );
 
-create type fonctions as enum ('acteur', 'realisateur', 'producteur')
+create type fonctions as enum ('acteur', 'réalisateur', 'producteur')
 
 create table Staff --Films et Artistes
 (
