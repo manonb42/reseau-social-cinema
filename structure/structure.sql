@@ -83,11 +83,12 @@ create table Evenements
 	debut date not null,
 	fin date not null,
 	prix float not null,
-	lieu integer not null
+	lieu integer not null,
+	capacite integer not null,
 	primary key(e_id),
 	foreign key(lieu) references Lieux(id_l)
 	unique (debut, lieu),
-	CHECK (debut < fin && prix >=0)
+	CHECK (debut < fin && prix >=0 && capacite >= 0 )
 	--integrite : pour le même lieu, il ne peut pas y avoir deux événement dont les dates se superposent
 );
 
@@ -252,6 +253,15 @@ create table KeyWords
 (
 	mot varchar(255),
 	primary key(mot)
+);
+
+create table CompteStars
+(
+	id_a integer unique not null, 
+	id_u integer unique not null,
+	foreign key(id_a) references Artistes(id_a),
+	foreign key(id_u) references Utilisateurs(id_u),
+	
 );
 
 create table ArtistesKeyWords
