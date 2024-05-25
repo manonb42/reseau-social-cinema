@@ -242,7 +242,7 @@ create table Relation -- Utilisateurs et Utilisateurs
 	CHECK (follower <> followed) -- si (A follow B) et (B Follow A) alors on peut dire que A et B sont amis
 );
 
-create table Conversation -- Publications et Publications
+create table Conversations -- Publications et Publications
 (
 	source int, 
 	reponse int unique,
@@ -263,15 +263,19 @@ create table KeyWords
 
 create table CompteArtiste
 (
-	id_a integer unique not null, 
-	id_u integer unique not null,
-	foreign key(id_a) references Artistes(id_a),
-	foreign key(id_u) references Utilisateurs(id_u),
+	a_id integer unique not null, 
+	u_id integer unique not null,
+	foreign key(a_id) references Artistes(a_id),
+	foreign key(u_id) references Utilisateurs(u_id),
 	
 );
 
 create table CompteEntreprise
 (
+	ent_id integer unique not null, 
+	u_id integer unique not null,
+	foreign key(ent_id) references Entreprises(ent_id),
+	foreign key(u_id) references Utilisateurs(u_id),
 	
 )
 
