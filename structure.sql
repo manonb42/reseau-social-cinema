@@ -15,7 +15,7 @@ create table Utilisateurs
 
 create type roles as enum ('moderateur', 'admin', 'vip');
 
-create table Artistes
+create table Artistes --agissant dans le processus de développement du film
 (
 	a_id serial,
 	nom varchar(100) not null,
@@ -24,6 +24,13 @@ create table Artistes
 	pays varchar(100),
 	primary key(a_id)
 );
+
+create table Entreprise
+(
+	ent_id serial,
+	nom varchar(100) not null,
+	primary key(ent_id)
+)
 
 create table Films
 (
@@ -140,15 +147,26 @@ create table FilmsGenres -- Films et Genres
 	foreign key(g_id) references Films(g_id) on delete cascade
 );
 
+create type fonctions as enum ('acteur', 'realisateur', 'producteur')
 
-create table Castings --Films et Artistes
+create table Staff --Films et Artistes
 (
 	f_id int,
 	a_id int, 
-	primary key (f_id, u_id),
+	fonction fonctions,
+	primary key (f_id, u_id, fonction),
 	foreign key(f_id) references Films(f_id) on delete cascade,
 	foreign key(a_id) references Artistes(a_id) on delete cascade
 );
+
+create table SocieteDeProduction
+(
+	f_id int,
+	ent_id int,
+	primary key(f_id, ent_id),
+	foreign key(f_id) references Films(f_id),
+	foreign key(ent_id) references Entreprises(ent_id)
+)
 
 create table ParentGenre -- Genres et Genres
 (
@@ -172,19 +190,7 @@ create table Programme -- Films et Evenements
 	-- trigger evenement futur
 );
 
-create table AvisEvenements --  Evenements et Utilisateurs
-(
-	e_id int,
-	u_id int,
-	mark float,
-	primary key(e_id, u_id),
-	foreign key(e_id) references Evenements(e_id) on delete cascade,
-	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
-	CHECK (mark >=0 AND mark<=5)
-	-- trigger evenement passé
-);
-
-create table Participation -- Utilisateurs et Evenements
+create table Participants -- Utilisateurs et Evenements
 (
 	e_id int, 
 	u_id int,
@@ -255,7 +261,7 @@ create table KeyWords
 	primary key(mot)
 );
 
-create table CompteStars
+create table CompteArtiste
 (
 	id_a integer unique not null, 
 	id_u integer unique not null,
@@ -263,6 +269,11 @@ create table CompteStars
 	foreign key(id_u) references Utilisateurs(id_u),
 	
 );
+
+create table CompteEntreprise
+(
+	
+)
 
 create table ArtistesKeyWords
 (

@@ -1,9 +1,10 @@
 ----- requêtes qui porte sur au moins 3 tables
-SELECT DISTINCT F.titre
-FROM Utilisateurs U NATURAL JOIN Avis a NATURAL JOIN Film F
+SELECT DISTINCT F.id_f, F.titre
+FROM Utilisateurs U NATURAL JOIN AvisFilms A NATURAL JOIN Films F
 WHERE A.notation = 5 
 AND U.role = 'VIP'
 -- selectionne les films qui ont reçu la notation 5/5 par au moins un utilisateur VIP
+
 
 SELECT DISTINCT A.a_id, A.prenom, A.nom
 FROM Artistes A NATURAL JOIN Casting C NATURAL JOIN Films F
@@ -74,5 +75,4 @@ FROM (
 WHERE A.a_id = reaslisent_que_des_The.r_id ;
 	     
 
-
---
+--requête sur aux moins 3 tables
