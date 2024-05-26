@@ -54,7 +54,7 @@ INSERT INTO Entreprises (nom) VALUES
     ('Lionsgate'),
     ('Metro-Goldwyn-Mayer (MGM)'),
     ('New Line Cinema'),
-    ('DreamWorks Pictures')
+    ('DreamWorks Pictures'),
     ('Gaumont Pathé');
 
 INSERT INTO Films (titre, date_sortie) VALUES
@@ -92,7 +92,7 @@ INSERT INTO Lieux (nom, adresse, ville, pays, capacite, outside) VALUES
     ('Ziegfeld Theatre', '141 W 54th St', 'New York', 'États-Unis', 1500, 'false');
 
 INSERT INTO Evenements (nom, debut, fin, prix, lieu, capacite) VALUES
-    ('Cannes Film Festival', '2024-05-13', '2024-05-23', 200.00, 4, 600),
+    ('Cannes Film Festival', '2023-05-13', '2023-05-23', 200.00, 4, 600),
     ('Locarno Film Festival', '2024-08-07', '2024-08-17', 150.00, 9, 2000),
     ('Toronto International Film Festival', '2024-09-05', '2024-09-15', 180.00, 6, 250),
     ('Venice Film Festival', '2024-09-02', '2024-09-12', 220.00, 3, 1800),
@@ -138,7 +138,6 @@ INSERT INTO Genres (nom) VALUES
     ('Documentaire historique'),
     ('Documentaire animalier'),
     ('Romance dramatique'),
-    ('Comédie romantique'),
     ('Romance d''époque');
 
 INSERT INTO Discussions (nom) VALUES
@@ -210,7 +209,6 @@ INSERT INTO Reactions (u_id, p_id, emoji) VALUES
     (16, 7, 'thumb'),
     (17, 8, 'happy'),
     (18, 9, 'like'),
-    (19, 10, 'like'),
     (20, 12, 'thumb'),
     (20, 12, 'like');
 
@@ -250,7 +248,6 @@ INSERT INTO Avis (f_id, u_id, mark, commentaire) VALUES
     (10, 20, 3.9, 'Bon film dans l''ensemble, mais quelques longueurs.');
 
 INSERT INTO GenresFilms (f_id, g_id) VALUES 
-    (1, 1), 
     (1, 3),
     (2, 2), 
     (2, 7),
@@ -266,7 +263,6 @@ INSERT INTO GenresFilms (f_id, g_id) VALUES
     (7, 9),
     (8, 6), 
     (8, 10),
-    (9, 1), 
     (9, 8),
     (10, 4), 
     (10, 7);
@@ -306,7 +302,6 @@ INSERT INTO Staff (f_id, a_id, fonction) VALUES
 
 
 INSERT INTO SocietesDeProduction (f_id, ent_id) VALUES
-    (1, 1),
     (2, 2),
     (3, 3),
     (4, 4),
@@ -317,7 +312,6 @@ INSERT INTO SocietesDeProduction (f_id, ent_id) VALUES
     (9, 9),
     (10, 10),
     (11, 11),
-    (12, 1),
     (13, 2),
     (14, 3),
     (15, 4),
