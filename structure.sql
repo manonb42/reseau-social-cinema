@@ -94,9 +94,9 @@ create table Evenements
 	lieu integer not null,
 	capacite integer not null,
 	primary key(e_id),
-	foreign key(lieu) references Lieux(id_l)
+	foreign key(lieu) references Lieux(id_l),
 	unique (debut, lieu),
-	CHECK (debut < fin && prix >=0 && capacite >= 0 )
+	CHECK (debut < fin AND prix >=0 AND capacite >= 0 )
 	--integrite : pour le même lieu, il ne peut pas y avoir deux événement dont les dates se superposent
 );
 
@@ -148,7 +148,7 @@ create table GenresFilms -- Films et Genres
 	foreign key(g_id) references Films(g_id) on delete cascade
 );
 
-create type fonctions as enum ('acteur', 'réalisateur', 'producteur')
+create type fonctions as enum ('acteur', 'réalisateur', 'producteur');
 
 create table Staff --Films et Artistes
 (
