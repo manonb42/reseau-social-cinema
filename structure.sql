@@ -8,8 +8,8 @@ create table Utilisateurs
 	mdp  varchar(100) not null,
 	birth date,
 	pays varchar(100),
-	bio varchar(100),
-	hierarchie roles not null,
+	biographie varchar(100),
+	attribution roles,
 	primary key(u_id)
 );
 
@@ -25,7 +25,7 @@ create table Artistes --agissant dans le processus de développement du film
 	primary key(a_id)
 );
 
-create table Entreprise
+create table Entreprises
 (
 	ent_id serial,
 	nom varchar(100) not null,
@@ -115,7 +115,7 @@ create table Lieux
 )
 
 -- entité faible de Evenements
-create table Archives_web
+create table Archives
 (
 	e_id int not null,
 	lien_web varchar(255) not null,
@@ -128,7 +128,7 @@ create table Archives_web
 
 -- liens entre tables 
 
-create table AvisFilms -- Films et Utilisateurs
+create table Avis -- Films et Utilisateurs
 (
 	f_id int,
 	u_id int,
@@ -139,7 +139,7 @@ create table AvisFilms -- Films et Utilisateurs
 	CHECK (mark >=0 AND mark<=5)
 );
 
-create table FilmsGenres -- Films et Genres
+create table GenresFilms -- Films et Genres
 (
 	f_id int, 
 	g_id int,
@@ -160,7 +160,7 @@ create table Staff --Films et Artistes
 	foreign key(a_id) references Artistes(a_id) on delete cascade
 );
 
-create table SocieteDeProduction
+create table SocietesDeProduction
 (
 	f_id int,
 	ent_id int,
@@ -169,19 +169,19 @@ create table SocieteDeProduction
 	foreign key(ent_id) references Entreprises(ent_id)
 )
 
-create table ParentGenre -- Genres et Genres
+create table GenresParents -- Genres et Genres
 (
-	genre_parent int,
-	genre_enfant int,
-	primary key(genre_parent, genre_enfant),
-	foreign key(genre_parent) references Genres(g_id) on delete cascade,
-	foreign key(genre_enfant) references Genres(g_id) on delete cascade,
-	CHECK (genre_parent <> genre_enfant) -- le souci c'est qu'il peut y avoir le couple (A,B) et le couple (B,A)
+	genre int,
+	sousgenre int,
+	primary key(genre, sousgenre),
+	foreign key(genre) references Genres(g_id) on delete cascade,
+	foreign key(sousgenre) references Genres(g_id) on delete cascade,
+	CHECK (genre <> sousgenre) -- le souci c'est qu'il peut y avoir le couple (A,B) et le couple (B,A)
 	--CHECK genre_parent > genre_enfant : le souci c'est que ça demande une insertion chronologique/hiérarchique des genres
 );
 
 
-create table Programme -- Films et Evenements
+create table Programmes -- Films et Evenements
 (
 	e_id int,
 	f_id int,
@@ -233,7 +233,7 @@ create table GenresParents -- Genres et Genres
 	--CHECK genre_parent > genre_enfant : le souci c'est que ça demande une insertion chronologique/hiérarchique des genres
 );
 
-create table Relation -- Utilisateurs et Utilisateurs
+create table Relations -- Utilisateurs et Utilisateurs
 (
 	follower int,
 	followed int, 
@@ -262,7 +262,7 @@ create table KeyWords
 	primary key(mot)
 );
 
-create table CompteArtiste
+create table ComptesArtistes
 (
 	a_id integer unique not null, 
 	u_id integer unique not null,
@@ -271,7 +271,7 @@ create table CompteArtiste
 	
 );
 
-create table CompteEntreprise
+create table ComptesEntreprises
 (
 	ent_id integer unique not null, 
 	u_id integer unique not null,
@@ -298,7 +298,7 @@ create table FilmsKeyWords
 	foreign key(mot) references KeyWords(mot) on delete cascade
 );
 
-create table EventKeyWords
+create table EventsKeyWords
 (
 	id_e integer not null,
 	mot varchar(255),
