@@ -20,7 +20,7 @@ INSERT INTO Utilisateurs (pseudo, email, nom, prenom, mdp, birth, pays, biograph
     ('cinephiliac', 'cinephiliac@yahoo.com', 'Tanaka', 'Yuki', 'mdpyuki', '1991-08-11', 'Japon', 'Cinéphile invétéré.', 'vip'),
     ('movieenthusiast', 'movieenthusiast@hotmail.com', 'Chung', 'Hye-Jin', 'mdphyejin', '1984-12-30', 'Corée du Sud', 'Passionnée par tout ce qui touche au cinéma.', NULL),
     ('filmaddict', 'filmaddict@example.com', 'Nakamura', 'Haruto', 'mdpharuto', NULL, 'Japon', 'Addict au cinéma depuis toujours.', 'admin'),
-    ('cinemafreak', 'cinemafreak@gmail.com', 'Sato', 'Aoi', 'mdpsato', '1994-11-07', 'Japon', 'Obsédée par les films.', 'vip')
+    ('cinemafreak', 'cinemafreak@gmail.com', 'Sato', 'Aoi', 'mdpsato', '1994-11-07', 'Japon', 'Obsédée par les films.', 'vip'),
     ('hmiyazaki', 'hmiyazaki@example.com', 'Miyazaki', 'Hayao', 'ghibli123', '1941-01-05', 'Japon', 'Réalisateur japonais renommé, cofondateur du Studio Ghibli.', 'modérateur'),
     ('wwenders', 'wwenders@example.com', 'Wenders', 'Wim', 'wim123', '1945-08-14', 'Allemagne', 'Réalisateur allemand, connu pour ses films expérimentaux et sa maîtrise du cinéma d''auteur.', 'vip'),
     ('acuaron', 'acuaron@example.com', 'Cuarón', 'Alfonso', 'cuaron123', '1961-11-28', 'Mexique', 'Réalisateur mexicain primé aux Oscars, célèbre pour des films tels que "Gravity" et "Roma".', 'certifié'),
@@ -29,13 +29,9 @@ INSERT INTO Utilisateurs (pseudo, email, nom, prenom, mdp, birth, pays, biograph
     ('dchazelle', 'dchazelle@example.com', 'Chazelle', 'Damien', 'damien123', '1985-01-19', 'États-Unis', 'Réalisateur américain, le plus jeune à remporter un Oscar du meilleur réalisateur pour "La La Land".', 'vip'),
     ('ahitchcock', 'ahitchcock@example.com', 'Hitchcock', 'Alfred', 'alfred123', '1899-08-13', 'Royaume-Uni', 'Réalisateur britannique légendaire, maître du suspense et du thriller.', 'modérateur'),
     ('ffellini', 'ffellini@example.com', 'Fellini', 'Federico', 'federico123', '1920-01-20', 'Italie', 'Réalisateur italien célèbre pour ses films surrealistes et fantasques.', 'certifié'),
-    ('WarnerBros', 'warnerbros@cie.com', NULL, NULL, 'supersecret', NULL, 'yeah', 'certifé'),
-    ('Gaumont', 'gaumontpathe@cie.com', NULL, NULL, 'supersecret', NULL, 'yihaa', 'certifé');
+    ('WarnerBros', 'warnerbros@cie.com', NULL, NULL, 'supersecret', NULL, 'États-Unis','yeah', 'certifié'),
+    ('Gaumont', 'gaumontpathe@cie.com', NULL, NULL, 'supersecret', NULL, 'yihaa','France', 'certifié');
 
-
-INSERT INTO ComptesEntreprises (ent_id, u_id) VALUES
-    (1,31),
-    (11,32);
 
 INSERT INTO Artistes (nom, prenom, birth, pays) VALUES
     ('Tarantino', 'Quentin', '1963-03-27', 'États-Unis'),
@@ -79,13 +75,18 @@ INSERT INTO Entreprises (nom) VALUES
     ('Lionsgate'),
     ('Metro-Goldwyn-Mayer (MGM)'),
     ('New Line Cinema'),
-    ('DreamWorks Pictures')
+    ('DreamWorks Pictures'),
     ('Gaumont Pathé');
+
+INSERT INTO ComptesEntreprises (ent_id, u_id) VALUES
+    (1,31),
+    (11,32);
+
 
 INSERT INTO Films (titre, date_sortie) VALUES
     ('Pulp Fiction', '1994-10-14'),
     ('Jurassic Park', '1993-06-11'),
-    ('Les 4 Dinosaures', '1993-24-10'),
+    ('Les 4 Dinosaures', '1993-10-24'),
     ('The Dark Knight', '2008-07-18'),
     ('The Godfather', '1972-03-24'),
     ('2001: A Space Odyssey', '1968-04-02'),
@@ -164,8 +165,7 @@ INSERT INTO Genres (nom) VALUES
     ('Documentaire historique'),
     ('Documentaire animalier'),
     ('Romance dramatique'),
-    ('Comédie romantique'),
-    ('Romance d''époque'),
+    ('Romance d''époque');
 
 INSERT INTO Discussions (nom) VALUES
     ('Les meilleurs films de tous les temps'),
@@ -215,7 +215,6 @@ INSERT INTO Reactions (u_id, p_id, emoji) VALUES
     (16, 8, 'thumb'),
     (17, 9, 'like'),
     (18, 9, 'thumb'),
-    (19, 10, 'like'),
     (20, 10, 'sad'),
     (21, 10, 'angry'),
     (22, 10, 'happy'),
@@ -388,26 +387,26 @@ INSERT INTO Participants (e_id, u_id, interesse, inscrit) VALUES
     (3, 8, true, false),
     (4, 9, true, false),
     (5, 10, true, false),
-    (11, 21, false, true),
-    (11, 22, true, false),
-    (12, 23, false, true),
-    (12, 24, true, false),
-    (13, 25, true, false),
-    (13, 26, false, true),
-    (14, 27, true, false),
-    (14, 28, false, true),
-    (15, 29, false, true),
-    (15, 30, true, false),
-    (16, 1, false, true),
-    (16, 2, true, false),
-    (17, 3, true, false),
-    (17, 4, false, true),
-    (18, 5, true, false),
-    (18, 6, false, true),
-    (19, 7, false, true),
-    (19, 8, true, false),
-    (20, 9, true, false),
-    (20, 10, false, true);
+    (10, 21, false, true),
+    (10, 22, true, false),
+    (1, 23, false, true),
+    (6, 24, true, false),
+    (7, 25, true, false),
+    (8, 26, false, true),
+    (8, 27, true, false),
+    (8, 28, false, true),
+    (8, 29, false, true),
+    (7, 30, true, false),
+    (7, 1, false, true),
+    (7, 2, true, false),
+    (7, 3, true, false),
+    (7, 4, false, true),
+    (7, 5, true, false),
+    (1, 6, false, true),
+    (2, 7, false, true),
+    (7, 8, true, false),
+    (7, 9, true, false),
+    (7, 10, false, true);
 
 INSERT INTO Organisateurs (e_id, organisateur) VALUES
     (1, 1),
@@ -509,7 +508,6 @@ INSERT INTO GenresParents (genre,sousgenre) VALUES
     (2,13),
     (2,14),
     (2,30),
-    (2,35),
     (3,15),
     (3,16),
     (3,17),
@@ -523,13 +521,11 @@ INSERT INTO GenresParents (genre,sousgenre) VALUES
     (5,22),
     (6,22),
     (6,23),
-    (6,23),
+    (6,24),
     (6,29),
     (7,25),
     (7,26),
     (7,27);
-
-INSERT INTO Conversations
 
 
 
