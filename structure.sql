@@ -64,6 +64,7 @@ create table Publications
 	u_id int not null,
 	d_id int not null,
 	date_publication datetime not null,
+	contenu text not null,
 	primary key(p_id),
 	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
 	foreign key(d_id) references Discussions(d_id) on delete cascade
