@@ -20,7 +20,22 @@ INSERT INTO Utilisateurs (pseudo, email, nom, prenom, mdp, birth, pays, biograph
     ('cinephiliac', 'cinephiliac@yahoo.com', 'Tanaka', 'Yuki', 'mdpyuki', '1991-08-11', 'Japon', 'Cinéphile invétéré.', 'vip'),
     ('movieenthusiast', 'movieenthusiast@hotmail.com', 'Chung', 'Hye-Jin', 'mdphyejin', '1984-12-30', 'Corée du Sud', 'Passionnée par tout ce qui touche au cinéma.', NULL),
     ('filmaddict', 'filmaddict@example.com', 'Nakamura', 'Haruto', 'mdpharuto', NULL, 'Japon', 'Addict au cinéma depuis toujours.', 'admin'),
-    ('cinemafreak', 'cinemafreak@gmail.com', 'Sato', 'Aoi', 'mdpsato', '1994-11-07', 'Japon', 'Obsédée par les films.', 'vip');
+    ('cinemafreak', 'cinemafreak@gmail.com', 'Sato', 'Aoi', 'mdpsato', '1994-11-07', 'Japon', 'Obsédée par les films.', 'vip')
+    ('hmiyazaki', 'hmiyazaki@example.com', 'Miyazaki', 'Hayao', 'ghibli123', '1941-01-05', 'Japon', 'Réalisateur japonais renommé, cofondateur du Studio Ghibli.', 'modérateur'),
+    ('wwenders', 'wwenders@example.com', 'Wenders', 'Wim', 'wim123', '1945-08-14', 'Allemagne', 'Réalisateur allemand, connu pour ses films expérimentaux et sa maîtrise du cinéma d''auteur.', 'vip'),
+    ('acuaron', 'acuaron@example.com', 'Cuarón', 'Alfonso', 'cuaron123', '1961-11-28', 'Mexique', 'Réalisateur mexicain primé aux Oscars, célèbre pour des films tels que "Gravity" et "Roma".', 'certifié'),
+    ('daronofsky', 'daronofsky@example.com', 'Aronofsky', 'Darren', 'darren123', '1969-02-12', 'États-Unis', 'Réalisateur américain réputé pour ses films provocateurs et psychologiques.', 'modérateur'),
+    ('agiñarritu', 'agiñarritu@example.com', 'Inarritu', 'Alejandro González', 'alejandro123', '1963-08-15', 'Mexique', 'Réalisateur mexicain primé aux Oscars, connu pour ses films dramatiques et puissants.', 'modérateur'),
+    ('dchazelle', 'dchazelle@example.com', 'Chazelle', 'Damien', 'damien123', '1985-01-19', 'États-Unis', 'Réalisateur américain, le plus jeune à remporter un Oscar du meilleur réalisateur pour "La La Land".', 'vip'),
+    ('ahitchcock', 'ahitchcock@example.com', 'Hitchcock', 'Alfred', 'alfred123', '1899-08-13', 'Royaume-Uni', 'Réalisateur britannique légendaire, maître du suspense et du thriller.', 'modérateur'),
+    ('ffellini', 'ffellini@example.com', 'Fellini', 'Federico', 'federico123', '1920-01-20', 'Italie', 'Réalisateur italien célèbre pour ses films surrealistes et fantasques.', 'certifié'),
+    ('WarnerBros', 'warnerbros@cie.com', NULL, NULL, 'supersecret', NULL, 'yeah', 'certifé'),
+    ('Gaumont', 'gaumontpathe@cie.com', NULL, NULL, 'supersecret', NULL, 'yihaa', 'certifé');
+
+
+INSERT INTO ComptesEntreprises (ent_id, u_id) VALUES
+    (1,31),
+    (11,32);
 
 INSERT INTO Artistes (nom, prenom, birth, pays) VALUES
     ('Tarantino', 'Quentin', '1963-03-27', 'États-Unis'),
@@ -44,6 +59,16 @@ INSERT INTO Artistes (nom, prenom, birth, pays) VALUES
     ('Hitchcock', 'Alfred', '1899-08-13', 'Royaume-Uni'),
     ('Fellini', 'Federico', '1920-01-20', 'Italie');
 
+INSERT INTO ComptesArtistes VALUES
+    (13,23),
+    (14,24),
+    (15,25),
+    (16,26),
+    (17,27),
+    (18,28),
+    (19,29),
+    (20,20);
+
 INSERT INTO Entreprises (nom) VALUES
     ('Warner Bros.'),
     ('Universal Pictures'),
@@ -60,6 +85,7 @@ INSERT INTO Entreprises (nom) VALUES
 INSERT INTO Films (titre, date_sortie) VALUES
     ('Pulp Fiction', '1994-10-14'),
     ('Jurassic Park', '1993-06-11'),
+    ('Les 4 Dinosaures', '1993-24-10'),
     ('The Dark Knight', '2008-07-18'),
     ('The Godfather', '1972-03-24'),
     ('2001: A Space Odyssey', '1968-04-02'),
@@ -98,7 +124,7 @@ INSERT INTO Evenements (nom, debut, fin, prix, lieu, capacite) VALUES
     ('Venice Film Festival', '2024-09-02', '2024-09-12', 220.00, 3, 1800),
     ('Sundance Film Festival', '2025-01-23', '2025-02-02', 120.00, 7, 1500),
     ('Berlin International Film Festival', '2025-02-07', '2025-02-17', 170.00, 8, 2200),
-    ('New York Film Festival', '2025-09-26', '2025-10-12', 190.00, 10, 1800),
+    ('Dinosaurus Projection', '2025-09-26', '2025-10-12', 190.00, 10, 1800),
     ('Tokyo International Film Festival', '2025-10-25', '2025-11-03', 160.00, 1, 900),
     ('London Film Festival', '2025-11-07', '2025-11-17', 150.00, 5, 450),
     ('Hollywood Film Awards', '2025-12-02', '2025-12-10', 210.00, 1, 990);
@@ -139,7 +165,7 @@ INSERT INTO Genres (nom) VALUES
     ('Documentaire animalier'),
     ('Romance dramatique'),
     ('Comédie romantique'),
-    ('Romance d''époque');
+    ('Romance d''époque'),
 
 INSERT INTO Discussions (nom) VALUES
     ('Les meilleurs films de tous les temps'),
@@ -151,7 +177,8 @@ INSERT INTO Discussions (nom) VALUES
     ('Critique de "Tenet" de Christopher Nolan'),
     ('Cinéma d''animation : Pixar vs DreamWorks'),
     ('Le rôle des femmes dans l''industrie du cinéma'),
-    ('Adaptations cinématographiques de livres célèbres');
+    ('Adaptations cinématographiques de livres célèbres'),
+    ('Best Festival Ever');
 
 INSERT INTO Publications (u_id, d_id, date_publication, contenu) VALUES
     (7, 1, '2024-05-26 10:00:00', 'Quels sont vos choix pour les meilleurs films de tous les temps ?'),
@@ -234,7 +261,7 @@ INSERT INTO Avis (f_id, u_id, mark, commentaire) VALUES
     (2, 4, 4.0, 'Très bon film, mais la fin était un peu prévisible.'),
     (3, 5, 3.5, 'Pas mal, mais l''intrigue aurait pu être mieux développée.'),
     (3, 6, 4.1, 'J''ai beaucoup aimé les effets spéciaux, mais l''histoire était un peu faible.'),
-    (4, 7, 4.7, 'Un chef-d''œuvre ! Un casting incroyable et une histoire captivante.'),
+    (4, 7, 4.7, 'Un chef d''œuvre ! Un casting incroyable et une histoire captivante.'),
     (4, 8, 3.9, 'Bon film dans l''ensemble, mais quelques longueurs.'),
     (5, 9, 4.4, 'Excellent film, émouvant et bien interprété.'),
     (5, 10, 4.3, 'Très bon film, mais la fin m''a laissé sur ma faim.'),
@@ -326,6 +353,186 @@ INSERT INTO SocietesDeProduction (f_id, ent_id) VALUES
     (18, 7),
     (19, 8),
     (20, 9);
+
+INSERT INTO Programmes (e_id, f_id) VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (6, 6),
+    (7, 2),
+    (7, 3),
+    (8, 8),
+    (9, 9),
+    (10, 10),
+    (1, 11),
+    (2, 12),
+    (3, 13),
+    (4, 14),
+    (5, 15),
+    (6, 16),
+    (7, 17),
+    (8, 18),
+    (9, 19),
+    (10, 20);
+
+INSERT INTO Participants (e_id, u_id, interesse, inscrit) VALUES
+    (1, 1, true, false),
+    (1, 2, true, false),
+    (1, 3, false, true),
+    (2, 4, true, false),
+    (2, 5, true, false),
+    (2, 6, true, false),
+    (3, 7, false, true),
+    (3, 8, true, false),
+    (4, 9, true, false),
+    (5, 10, true, false),
+    (11, 21, false, true),
+    (11, 22, true, false),
+    (12, 23, false, true),
+    (12, 24, true, false),
+    (13, 25, true, false),
+    (13, 26, false, true),
+    (14, 27, true, false),
+    (14, 28, false, true),
+    (15, 29, false, true),
+    (15, 30, true, false),
+    (16, 1, false, true),
+    (16, 2, true, false),
+    (17, 3, true, false),
+    (17, 4, false, true),
+    (18, 5, true, false),
+    (18, 6, false, true),
+    (19, 7, false, true),
+    (19, 8, true, false),
+    (20, 9, true, false),
+    (20, 10, false, true);
+
+INSERT INTO Organisateurs (e_id, organisateur) VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (6,15),
+    (7, 32),
+    (8, 13),
+    (9, 32),
+    (10,31);
+
+INSERT INTO Annonces (e_id, d_id) VALUES
+    (8,11);
+
+INSERT INTO Relations (follower, followed) VALUES
+    (2, 19),
+    (7, 14),
+    (9, 26),
+    (5, 22),
+    (3, 15),
+    (12, 25),
+    (20, 32),
+    (4, 29),
+    (10, 23),
+    (8, 28),
+    (13, 24),
+    (17, 31),
+    (1, 27),
+    (6, 11),
+    (21, 30),
+    (18, 16),
+    (2, 32),
+    (7, 13),
+    (9, 21),
+    (5, 8),
+    (3, 20),
+    (12, 26),
+    (15, 22),
+    (4, 18),
+    (10, 27),
+    (19, 29),
+    (16, 31),
+    (1, 14),
+    (6, 25),
+    (23, 30),
+    (11, 24),
+    (17, 28),
+    (2, 9),
+    (7, 12),
+    (3, 19),
+    (5, 16),
+    (8, 22),
+    (13, 32),
+    (14, 20),
+    (4, 26),
+    (10, 31),
+    (15, 23),
+    (1, 29),
+    (6, 18),
+    (21, 27),
+    (24, 30),
+    (11, 17),
+    (25, 28),
+    (19, 2),
+    (14, 7),
+    (26, 9),
+    (22, 5),
+    (15, 3),
+    (25, 12),
+    (32, 20),
+    (29, 4),
+    (23, 10),
+    (28, 8),
+    (24, 13),
+    (31, 17),
+    (27, 1),
+    (11, 6),
+    (30, 21),
+    (16, 18),
+    (32, 2),
+    (13, 7),
+    (21, 9),
+    (8, 5),
+    (20, 3),
+    (26, 12),
+    (22, 15),
+    (18, 4),
+    (27, 10);
+
+
+INSERT INTO GenresParents (genre,sousgenre) VALUES
+    (1,11),
+    (1,13),
+    (1,20),
+    (1,26),
+    (2,12),
+    (2,13),
+    (2,14),
+    (2,30),
+    (2,35),
+    (3,15),
+    (3,16),
+    (3,17),
+    (3,34),
+    (4,18),
+    (4,19),
+    (4,21),
+    (4,24),
+    (5,20),
+    (5,21),
+    (5,22),
+    (6,22),
+    (6,23),
+    (6,23),
+    (6,29),
+    (7,25),
+    (7,26),
+    (7,27);
+
+INSERT INTO Conversations
+
+
+
 
 
 
