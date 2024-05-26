@@ -42,15 +42,15 @@ FOR EACH ROW EXECUTE FUNCTION check_event_capacity();
 CREATE OR REPLACE FUNCTION check_event_start_date()
 RETURNS TRIGGER AS $$
 DECLARE
-    debut DATE;
+    debut_ev DATE;
 BEGIN
     -- Récupération de la date de l'événement
-    SELECT debut INTO debut
+    SELECT debut INTO debut_ev
     FROM Evenements
     WHERE e_id = NEW.e_id;
 
     -- Vérification que la date est future
-    IF debut < CURRENT_DATE THEN
+    IF debut_ev < CURRENT_DATE THEN
         RETURN NULL;
     END IF;
     RETURN NEW;

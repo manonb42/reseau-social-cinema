@@ -62,6 +62,7 @@ INSERT INTO Films (titre, date_sortie) VALUES
     ('Jurassic Park', '1993-06-11'),
     ('The Dark Knight', '2008-07-18'),
     ('The Godfather', '1972-03-24'),
+    ('Avatar 3', '2025-01-01'),
     ('2001: A Space Odyssey', '1968-04-02'),
     ('Taxi Driver', '1976-02-08'),
     ('Baby Driver', '2017-06-28'),
@@ -94,7 +95,7 @@ INSERT INTO Lieux (nom, adresse, ville, pays, capacite, outside) VALUES
 INSERT INTO Evenements (nom, debut, fin, prix, lieu, capacite) VALUES
     ('Cannes Film Festival', '2023-05-13', '2023-05-23', 200.00, 4, 600),
     ('Locarno Film Festival', '2024-08-07', '2024-08-17', 150.00, 9, 2000),
-    ('Toronto International Film Festival', '2024-09-05', '2024-09-15', 180.00, 6, 250),
+    ('Toronto International Film Festival', '2022-09-05', '2024-09-15', 180.00, 6, 250),
     ('Venice Film Festival', '2024-09-02', '2024-09-12', 220.00, 3, 1800),
     ('Sundance Film Festival', '2025-01-23', '2025-02-02', 120.00, 7, 1500),
     ('Berlin International Film Festival', '2025-02-07', '2025-02-17', 170.00, 8, 2200),
@@ -102,6 +103,13 @@ INSERT INTO Evenements (nom, debut, fin, prix, lieu, capacite) VALUES
     ('Tokyo International Film Festival', '2025-10-25', '2025-11-03', 160.00, 1, 900),
     ('London Film Festival', '2025-11-07', '2025-11-17', 150.00, 5, 450),
     ('Hollywood Film Awards', '2025-12-02', '2025-12-10', 210.00, 1, 990);
+
+INSERT INTO Programmes (e_id, f_id) VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4), 
+    (5, 5);
 
 INSERT INTO Genres (nom) VALUES
     ('Action'),
@@ -219,7 +227,6 @@ INSERT INTO Archives (e_id, lien_web) VALUES
     (4, 'http://www.example.com/event4'),
     (5, 'http://www.example.com/event5'),
     (6, 'http://www.example.com/event6'),
-    (7, 'http://www.example.com/event7'),
     (8, 'http://www.example.com/event8'),
     (9, 'http://www.example.com/event9'),
     (10, 'http://www.example.com/event10');
