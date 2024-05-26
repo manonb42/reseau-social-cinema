@@ -44,12 +44,10 @@ RETURNS TRIGGER AS $$
 DECLARE
     debut_ev DATE;
 BEGIN
-    -- Récupération de la date de l'événement
     SELECT debut INTO debut_ev
     FROM Evenements
     WHERE e_id = NEW.e_id;
 
-    -- Vérification que la date est future
     IF debut_ev < CURRENT_DATE THEN
         RETURN NULL;
     END IF;
