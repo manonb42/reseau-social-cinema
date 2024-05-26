@@ -172,7 +172,7 @@ WITH Participation(e_id, nom, ville, effectif) AS
 		WHERE inscrit
 		GROUP BY P.ent_id
 		) AS Total NATURAL JOIN Evenements E
-)
+);
 
 SELECT e_id, nom, effectif, ville, AVG(effectif) OVER (PARTITION BY ville) AS moyenne_ville
 FROM Participation

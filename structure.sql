@@ -1,3 +1,39 @@
+DROP TABLE IF EXISTS Utilisateurs CASCADE;
+DROP TABLE IF EXISTS Artistes CASCADE;
+DROP TABLE IF EXISTS Entreprises CASCADE;
+DROP TABLE IF EXISTS Films CASCADE;
+DROP TABLE IF EXISTS Genres CASCADE;
+DROP TABLE IF EXISTS Discussions CASCADE;
+DROP TABLE IF EXISTS Lieux CASCADE;
+DROP TABLE IF EXISTS Evenements CASCADE;
+DROP TABLE IF EXISTS Publications CASCADE;
+DROP TABLE IF EXISTS Reactions CASCADE;
+DROP TABLE IF EXISTS Archives CASCADE;
+DROP TABLE IF EXISTS Avis CASCADE;
+DROP TABLE IF EXISTS GenresFilms CASCADE;
+DROP TABLE IF EXISTS Staff CASCADE;
+DROP TABLE IF EXISTS SocietesDeProduction CASCADE;
+DROP TABLE IF EXISTS GenresParents CASCADE;
+DROP TABLE IF EXISTS Programmes CASCADE;
+DROP TABLE IF EXISTS Participants CASCADE;
+DROP TABLE IF EXISTS Organisateurs CASCADE;
+DROP TABLE IF EXISTS Annonces CASCADE;
+DROP TABLE IF EXISTS Relations CASCADE;
+DROP TABLE IF EXISTS Conversations CASCADE;
+DROP TABLE IF EXISTS KeyWords CASCADE;
+DROP TABLE IF EXISTS ComptesArtistes CASCADE;
+DROP TABLE IF EXISTS ComptesEntreprises CASCADE;
+DROP TABLE IF EXISTS ArtistesKeyWords CASCADE;
+DROP TABLE IF EXISTS FilmsKeyWords CASCADE;
+DROP TABLE IF EXISTS EventsKeyWords CASCADE;
+DROP TYPE IF EXISTS attributions CASCADE;
+DROP TYPE IF EXISTS fonctions CASCADE;
+DROP TYPE IF EXISTS emojis CASCADE;
+
+create type attributions as enum ('modérateur', 'admin', 'vip', 'certifié');
+create type emojis as enum ('happy', 'sad', 'angry', 'shocked', 'disgusted', 'thumb', 'like', 'lol');
+create type fonctions as enum ('acteur', 'réalisateur', 'producteur');
+
 create table Utilisateurs
 (
 	u_id serial,
@@ -9,11 +45,11 @@ create table Utilisateurs
 	birth date,
 	pays varchar(100),
 	biographie varchar(100),
-	attribution roles,
+	attribution attributions,
 	primary key(u_id)
 );
 
-create type roles as enum ('modérateur', 'admin', 'vip', 'certifié');
+
 
 create table Artistes --agissant dans le processus de développement du film
 (
@@ -25,21 +61,21 @@ create table Artistes --agissant dans le processus de développement du film
 	primary key(a_id)
 );
 
+
+
 create table Entreprises
 (
 	ent_id serial,
 	nom varchar(100) not null,
 	primary key(ent_id)
-)
+);
 
 create table Films
 (
 	f_id serial,
-	titre varchar(100) not null,
-	realisateur int not null,
+	titre varchar(255) not null,
 	date_sortie date,
-	primary key(f_id),
-	foreign key(realisateur) references Artistes(a_id)
+	primary key(f_id)
 	--il est légalement possible qu'un même réalisateur crée plusieurs films avec exactement le même nom, c'est déjà arrivé
 );
 
@@ -53,36 +89,25 @@ create table Genres
 create table Discussions
 (
 	d_id serial,
-	label varchar(100) not null,
-	primary key(d_id) --plusiers discussions peuvent avoir le même nom, comme sur beaucoup de réseaux sociaux
+	nom varchar(100) not null,
+	primary key(d_id) --plusieurs discussions peuvent avoir le même nom, comme sur beaucoup de réseaux sociaux
 );
 
 
-create table Publications
+
+create table Lieux
 (
-	p_id serial,
-	u_id int not null,
-	d_id int not null,
-	date_publication datetime not null,
-	contenu text not null,
-	primary key(p_id),
-	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
-	foreign key(d_id) references Discussions(d_id) on delete cascade
+	l_id serial,
+	nom varchar(100),
+	adresse varchar(255) not null,
+	ville varchar(100) not null,
+	pays varchar(100) not null,
+	capacite int,
+	outside boolean not null default 'false',
+	primary key(l_id),
+	unique (adresse, ville, pays),
+	CHECK (capacite >= 0)
 );
-
-
-create type emojis as enum ('happy', 'sad', 'angry', 'shocked', 'disgusted', 'thumb', 'heart', 'lol');
-
----- entité faible de Publications 
-create table Reactions
-(
-	u_id int not null,
-	p_id int not null,
-	emojis emoji not null,
-	primary key(u_id,p_id,emoji),
-	foreign key(u_id) references Utilisateurs(u_id) on delete set null,	
-);
-
 
 create table Evenements
 (
@@ -91,42 +116,51 @@ create table Evenements
 	debut date not null,
 	fin date not null,
 	prix float not null,
-	lieu integer not null,
-	capacite integer not null,
+	lieu int not null,
+	capacite int not null,
 	primary key(e_id),
-	foreign key(lieu) references Lieux(id_l),
+	foreign key(lieu) references Lieux(l_id),
 	unique (debut, lieu),
 	CHECK (debut < fin AND prix >=0 AND capacite >= 0 )
 	--integrite : pour le même lieu, il ne peut pas y avoir deux événement dont les dates se superposent
 );
 
-create table Lieux
+create table Publications
 (
-	id_l serial,
-	nom varchar(100),
-	adresse varchar(255) not null,
-	ville varchar(100) not null,
-	pays varchar(100) not null,
-	capacite integer,
-	outside boolean not null default 'false',
-	primary key(id_l),
-	unique (adresse, ville, pays),
-	CHECK (capacite >= 0)
-)
+	p_id serial,
+	u_id int not null,
+	d_id int not null,
+	date_publication timestamp not null,
+	contenu text not null,
+	primary key(p_id),
+	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
+	foreign key(d_id) references Discussions(d_id) on delete cascade
+);
 
--- entité faible de Evenements
+
+
+create table Reactions
+(
+	u_id int not null,
+	p_id int not null,
+	emoji emojis not null,
+	primary key(u_id,p_id,emoji),
+	foreign key(u_id) references Utilisateurs(u_id) on delete set null,	
+	foreign key(p_id) references Publications(p_id) on delete cascade
+);
+
+
+
 create table Archives
 (
 	e_id int not null,
 	lien_web varchar(255) not null,
 	primary key(e_id, lien_web),
 	foreign key(e_id) references Evenements(e_id) on delete cascade
-	-- trigger evenement passé
+
 );
 
-----------
 
--- liens entre tables 
 
 create table Avis -- Films et Utilisateurs
 (
@@ -139,57 +173,52 @@ create table Avis -- Films et Utilisateurs
 	CHECK (mark >=0 AND mark<=5)
 );
 
+
+
 create table GenresFilms -- Films et Genres
 (
 	f_id int, 
 	g_id int,
 	primary key(f_id,g_id),
 	foreign key(f_id) references Films(f_id) on delete cascade,
-	foreign key(g_id) references Films(g_id) on delete cascade
+	foreign key(g_id) references Genres(g_id) on delete cascade
 );
 
-create type fonctions as enum ('acteur', 'réalisateur', 'producteur');
+
 
 create table Staff --Films et Artistes
 (
 	f_id int,
 	a_id int, 
-	fonction fonctions,
-	primary key (f_id, u_id, fonction),
+	fonction fonctions not null,
+	primary key (f_id, a_id, fonction),
 	foreign key(f_id) references Films(f_id) on delete cascade,
-	foreign key(a_id) references Artistes(a_id) on delete cascade
+	foreign key(a_id) references Artistes(a_id)
 );
+
+
 
 create table SocietesDeProduction
 (
 	f_id int,
 	ent_id int,
 	primary key(f_id, ent_id),
-	foreign key(f_id) references Films(f_id),
+	foreign key(f_id) references Films(f_id) on delete cascade,
 	foreign key(ent_id) references Entreprises(ent_id)
-)
-
-create table GenresParents -- Genres et Genres
-(
-	genre int,
-	sousgenre int,
-	primary key(genre, sousgenre),
-	foreign key(genre) references Genres(g_id) on delete cascade,
-	foreign key(sousgenre) references Genres(g_id) on delete cascade,
-	CHECK (genre <> sousgenre) -- le souci c'est qu'il peut y avoir le couple (A,B) et le couple (B,A)
-	--CHECK genre_parent > genre_enfant : le souci c'est que ça demande une insertion chronologique/hiérarchique des genres
 );
+
 
 
 create table Programmes -- Films et Evenements
 (
 	e_id int,
 	f_id int,
-	primary key(e_if, f_id),
+	primary key(e_id, f_id),
 	foreign key(e_id) references Evenements(e_id) on delete cascade,
 	foreign key(f_id) references Films(f_id)
-	-- trigger evenement futur
 );
+
+
 
 create table Participants -- Utilisateurs et Evenements
 (
@@ -201,8 +230,9 @@ create table Participants -- Utilisateurs et Evenements
 	foreign key(e_id) references Evenements(e_id) on delete cascade,
 	foreign key(u_id) references Utilisateurs(u_id) on delete cascade,
 	CHECK (interesse <> inscrit)
-	-- trigger evenement futur
 );
+
+
 
 create table Organisateurs -- Utilisateurs et Evenements
 (
@@ -213,6 +243,8 @@ create table Organisateurs -- Utilisateurs et Evenements
 	foreign key(organisateur) references Utilisateurs(u_id) on delete cascade
 );
 
+
+
 create table Annonces -- Discussions et Evenements
 (
 	e_id int unique, 
@@ -222,16 +254,18 @@ create table Annonces -- Discussions et Evenements
 );
 
 
+
 create table GenresParents -- Genres et Genres
 (
 	genre int,
 	sousgenre int,
 	primary key(genre, sousgenre),
 	foreign key(genre) references Genres(g_id) on delete cascade,
-	foreign key(sous) references Genres(g_id) on delete cascade,
-	CHECK (genre <> sousgenre) -- le souci c'est qu'il peut y avoir le couple (A,B) et le couple (B,A)
-	--CHECK genre_parent > genre_enfant : le souci c'est que ça demande une insertion chronologique/hiérarchique des genres
+	foreign key(sousgenre) references Genres(g_id) on delete cascade,
+	CHECK (genre <> sousgenre)
 );
+
+
 
 create table Relations -- Utilisateurs et Utilisateurs
 (
@@ -243,18 +277,18 @@ create table Relations -- Utilisateurs et Utilisateurs
 	CHECK (follower <> followed) -- si (A follow B) et (B Follow A) alors on peut dire que A et B sont amis
 );
 
+
+
 create table Conversations -- Publications et Publications
 (
 	source int, 
 	reponse int unique,
-	-- un meme id ne peut pas etre plusieurs fois dans la table comme attribut reponse car sinon il est reponse a plusieurs publications en meme temps
-	-- (1,2) (1,3) (2,4) oui car 2 et 3 sont des réponses à 1, et 4 est une réponse à 2 
-	-- (1,2) (1,3) (2,3) non car 3 est une reponse à 2 ET à 1
-	-- primary key(source, reponse) ne sert à rien car etant donne reponse unique, le couple sera unique
 	foreign key(source) references Publications(p_id) on delete set null,
 	foreign key(reponse) references Publications(p_id) on delete cascade,
 	CHECK (source < reponse)
 );
+
+
 
 create table KeyWords
 (
@@ -262,48 +296,59 @@ create table KeyWords
 	primary key(mot)
 );
 
+
+
 create table ComptesArtistes
 (
-	a_id integer unique not null, 
-	u_id integer unique not null,
-	foreign key(a_id) references Artistes(a_id),
-	foreign key(u_id) references Utilisateurs(u_id),
-	
+	a_id int, 
+	u_id int,
+	primary key(a_id,u_id),
+	foreign key(a_id) references Artistes(a_id) on delete cascade,
+	foreign key(u_id) references Utilisateurs(u_id) on delete cascade
 );
+
+
 
 create table ComptesEntreprises
 (
-	ent_id integer unique not null, 
-	u_id integer unique not null,
-	foreign key(ent_id) references Entreprises(ent_id),
-	foreign key(u_id) references Utilisateurs(u_id),
+	ent_id int, 
+	u_id int,
+	primary key(ent_id,u_id),
+	foreign key(ent_id) references Entreprises(ent_id) on delete cascade,
+	foreign key(u_id) references Utilisateurs(u_id) on delete cascade
 	
-)
+);
+
+
 
 create table ArtistesKeyWords
 (
-	id_a integer not null,
+	a_id int not null,
 	mot varchar(255),
-	primary key(id_a, mot),
-	foreign key(id_a) references Artistes(id_a) on delete cascade,
+	primary key(a_id, mot),
+	foreign key(a_id) references Artistes(a_id) on delete cascade,
 	foreign key(mot) references KeyWords(mot) on delete cascade
 );
+
+
 
 create table FilmsKeyWords
 (
-	id_f integer not null,
+	f_id int not null,
 	mot varchar(255),
-	primary key(id_a, mot),
-	foreign key(id_f) references Films(id_f) on delete cascade,
+	primary key(f_id, mot),
+	foreign key(f_id) references Films(f_id) on delete cascade,
 	foreign key(mot) references KeyWords(mot) on delete cascade
 );
 
+
+
 create table EventsKeyWords
 (
-	id_e integer not null,
+	e_id int not null,
 	mot varchar(255),
-	primary key(id_a, mot),
-	foreign key(id_e) references Evenements(id_e) on delete cascade,
+	primary key(e_id, mot),
+	foreign key(e_id) references Evenements(e_id) on delete cascade,
 	foreign key(mot) references KeyWords(mot) on delete cascade
 );
 	
