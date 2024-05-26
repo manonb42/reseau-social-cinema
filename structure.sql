@@ -30,7 +30,7 @@ DROP TYPE IF EXISTS attributions CASCADE;
 DROP TYPE IF EXISTS fonctions CASCADE;
 DROP TYPE IF EXISTS emojis CASCADE;
 
-create type attributions as enum ('modérateur', 'admin', 'vip', 'certifié');
+create type attributions as enum ('modérateur', 'admin', 'vip', 'certifié', 'propriétaire');
 create type emojis as enum ('happy', 'sad', 'angry', 'shocked', 'disgusted', 'thumb', 'like', 'lol');
 create type fonctions as enum ('acteur', 'réalisateur', 'producteur');
 
@@ -51,7 +51,7 @@ create table Utilisateurs
 
 
 
-create table Artistes --agissant dans le processus de développement du film
+create table Artistes 
 (
 	a_id serial,
 	nom varchar(100) not null,
@@ -76,7 +76,6 @@ create table Films
 	titre varchar(255) not null,
 	date_sortie date,
 	primary key(f_id)
-	--il est légalement possible qu'un même réalisateur crée plusieurs films avec exactement le même nom, c'est déjà arrivé
 );
 
 create table Genres
@@ -90,7 +89,7 @@ create table Discussions
 (
 	d_id serial,
 	nom varchar(100) not null,
-	primary key(d_id) --plusieurs discussions peuvent avoir le même nom, comme sur beaucoup de réseaux sociaux
+	primary key(d_id)
 );
 
 
@@ -122,7 +121,6 @@ create table Evenements
 	foreign key(lieu) references Lieux(l_id),
 	unique (debut, lieu),
 	CHECK (debut < fin AND prix >=0 AND capacite >= 0 )
-	--integrite : pour le même lieu, il ne peut pas y avoir deux événement dont les dates se superposent
 );
 
 create table Publications
@@ -166,7 +164,8 @@ create table Avis -- Films et Utilisateurs
 (
 	f_id int,
 	u_id int,
-	mark float,
+	mark float not null,
+	commentaire text,
 	primary key(f_id, u_id),
 	foreign key(f_id) references Films(f_id) on delete cascade,
 	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
