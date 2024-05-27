@@ -1,7 +1,7 @@
 ----- REQUETES SUR AU MOINS 3 TABLES
 -- films qui ont reçu la notation 5/5 par au moins un utilisateur certifié
 SELECT DISTINCT F.f_id, F.titre
-FROM Utilisateurs U NATURAL JOIN Avis A NATURAL JOIN Films F
+FROM Utilisateurs U NATURAL JOIN AvisFilms A NATURAL JOIN Films F
 WHERE A.mark = 5 
 AND U.attribution= 'certifié';
 
@@ -9,7 +9,7 @@ AND U.attribution= 'certifié';
 ----- REQUETES AVEC UNE AUTOJOINTURE
 
 --selectionne les couples d'utilisateurs qui sont amis
-CREATE VIEW Amis AS
+CREATE VIEW Amis (u_id1, u_id2) AS
 (
 SELECT U1.pseudo, U2.pseudo
 FROM Relations R1, Relations R2, Utilisateurs U1, Utilisateurs U2
@@ -17,6 +17,9 @@ WHERE R1.follower = R2.followed AND R1.followed = R2.follower
 AND R1.follower < R1.followed
 AND U1.u_id = R1.follower AND U2.u_id=R1.followed
 );
+
+--l'utilisateur qui a le plus d'amis
+
 
 -- artistes qui ont été à la fois acteur et réalisateur d'un même film
 SELECT DISTINCT A.nom, A.prenom, F.titre
@@ -74,9 +77,9 @@ HAVING COUNT(*) >= 5;
 
 --les films dont la note moyenne individuelle est superieure à la note moyenne générale de toute la table
 SELECT A.f_id, CAST(SUM(A.mark)/COUNT(*) AS DECIMAL(3,2)) AS moyenne_individuelle
-FROM Avis A
+FROM AvisFilms A
 GROUP BY A.f_id
-HAVING SUM(A.mark)/COUNT(*) >= (SELECT SUM(mark)/COUNT(*) FROM Avis);
+HAVING SUM(A.mark)/COUNT(*) >= (SELECT SUM(mark)/COUNT(*) FROM AvisFilms);
 
 
 ----- AVEC CALCUL DE DEUX AGRÉGATS
@@ -84,7 +87,7 @@ HAVING SUM(A.mark)/COUNT(*) >= (SELECT SUM(mark)/COUNT(*) FROM Avis);
 WITH notes_max AS
 (
 SELECT A.f_id, MAX(A.mark) AS note
-FROM Avis A 
+FROM AvisFilms A 
 GROUP BY A.f_id
 )
 SELECT AVG(note) as note_max_moyenne

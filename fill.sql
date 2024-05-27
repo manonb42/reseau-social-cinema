@@ -1,5 +1,5 @@
 INSERT INTO Utilisateurs (pseudo, email, nom, prenom, mdp, birth, pays, biographie, attribution) VALUES
-    ('manon_du_94','manon@gmail.com','Baha','Manon','swinglpb19','2002-02-19','France','Vive le ciné !', 'propriétaire'),
+    ('manon_du_94','manon@gmail.com','Baha','Manon','swinglpb19','2003-01-19','France','Vive le ciné !', 'propriétaire'),
     ('jana_du_93', 'jana@gmail.com', 'Ayadi', 'Jana', 'caillouchouchou', '2003-10-23', 'France', 'Amatrice de ciné', 'propriétaire'),
     ('cinemafan', 'cinemafan@free.fr', 'Doe', 'John', 'mdpjohn', '1990-05-15', 'France', 'Passionné de cinéma depuis mon enfance.', 'vip'),
     ('cinephile92', 'cinephile92@gmail.com', 'Smith', 'Emily', 'mdpe123', '1985-09-20', 'États-Unis', 'Amatrice de films classiques.', NULL),
@@ -80,7 +80,7 @@ INSERT INTO Films (titre, date_sortie) VALUES
     ('Les 4 Dinosaures', '1993-10-24'),
     ('The Dark Knight', '2008-07-18'),
     ('The Godfather', '1972-03-24'),
-    ('Avatar 3', '2025-01-01'),
+    ('Avatar 3', '2025-01-01'), --VERIFIER
     ('2001: A Space Odyssey', '1968-04-02'),
     ('Taxi Driver', '1976-02-08'),
     ('Baby Driver', '2017-06-28'),
@@ -144,7 +144,7 @@ INSERT INTO Genres (nom) VALUES
 
 
 
-INSERT INTO Discussions (nom) VALUES
+INSERT INTO Discussions (theme) VALUES
     ('Les meilleurs films de tous les temps'),
     ('Analyse de la filmographie de Quentin Tarantino'),
     ('Discussion sur les Oscars de cette année'),
@@ -270,7 +270,7 @@ INSERT INTO Archives (e_id, lien_web) VALUES
 
 
 
-INSERT INTO Avis (f_id, u_id, mark, commentaire) VALUES
+INSERT INTO AvisFilms (f_id, u_id, notation, commentaire) VALUES
     (1, 1, 4.5, 'J''ai adoré ce film ! Très bien réalisé et captivant.'),
     (1, 2, 3.8, 'Un bon film, mais je m''attendais à un peu plus de suspense.'),
     (2, 3, 4.2, 'Excellent film, plein d''action et de rebondissements.'),
@@ -404,37 +404,37 @@ INSERT INTO Programmes (e_id, f_id) VALUES
 
 
 
-INSERT INTO Participants (e_id, u_id, interesse, inscrit) VALUES
-    (1, 1, true, false),
-    (1, 2, true, false),
-    (1, 3, false, true),
-    (2, 4, true, false),
-    (2, 5, true, false),
-    (2, 6, true, false),
-    (3, 7, false, true),
-    (3, 8, true, false),
-    (4, 9, true, false),
-    (5, 10, true, false),
-    (10, 21, false, true),
-    (10, 22, true, false),
-    (1, 23, false, true),
-    (6, 24, true, false),
-    (7, 25, true, false),
-    (8, 26, false, true),
-    (8, 27, true, false),
-    (8, 28, false, true),
-    (8, 29, false, true),
-    (7, 30, true, false),
-    (7, 1, false, true),
-    (7, 2, true, false),
-    (7, 3, true, false),
-    (7, 4, false, true),
-    (7, 5, true, false),
-    (1, 6, false, true),
-    (2, 7, false, true),
-    (7, 8, true, false),
-    (7, 9, true, false),
-    (7, 10, false, true);
+INSERT INTO Participants (e_id, u_id, inscrit) VALUES
+    (1, 1, true),
+    (1, 2, true),
+    (1, 3, false),
+    (2, 4, true),
+    (2, 5, true),
+    (2, 6, true),
+    (3, 7, false),
+    (3, 8, true),
+    (4, 9, true),
+    (5, 10, true),
+    (10, 21, false),
+    (10, 22, true),
+    (1, 23, false),
+    (6, 24, true),
+    (7, 25, true),
+    (8, 26, false),
+    (8, 27, true),
+    (8, 28, false),
+    (8, 29, false),
+    (7, 30, true),
+    (7, 1, false),
+    (7, 2, true),
+    (7, 3, true),
+    (7, 4, false),
+    (7, 5, true),
+    (1, 6, false),
+    (2, 7, false),
+    (7, 8, true),
+    (7, 9, true),
+    (7, 10, false);
 
 
 

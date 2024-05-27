@@ -1,3 +1,6 @@
+CREATE DATABASE CineNet;
+\c CineNet;
+
 DROP TABLE IF EXISTS Utilisateurs CASCADE;
 DROP TABLE IF EXISTS Artistes CASCADE;
 DROP TABLE IF EXISTS Entreprises CASCADE;
@@ -9,7 +12,8 @@ DROP TABLE IF EXISTS Evenements CASCADE;
 DROP TABLE IF EXISTS Publications CASCADE;
 DROP TABLE IF EXISTS Reactions CASCADE;
 DROP TABLE IF EXISTS Archives CASCADE;
-DROP TABLE IF EXISTS Avis CASCADE;
+DROP TABLE IF EXISTS AvisFilms CASCADE;
+DROP TABLE IF EXISTS AvisEvenements CASCADE;
 DROP TABLE IF EXISTS GenresFilms CASCADE;
 DROP TABLE IF EXISTS Staff CASCADE;
 DROP TABLE IF EXISTS SocietesDeProduction CASCADE;
@@ -88,7 +92,7 @@ create table Genres
 create table Discussions
 (
 	d_id serial,
-	nom varchar(100) unique not null,
+	theme varchar(100) unique not null,
 	primary key(d_id)
 );
 
@@ -160,16 +164,28 @@ create table Archives
 
 
 
-create table Avis -- Films et Utilisateurs
+create table AvisFilms -- Films et Utilisateurs
 (
 	f_id int,
 	u_id int,
-	mark float not null,
+	notation float not null,
 	commentaire text,
 	primary key(f_id, u_id),
 	foreign key(f_id) references Films(f_id) on delete cascade,
 	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
-	CHECK (mark >=0 AND mark<=5)
+	CHECK (notation >=0 AND notation <=5)
+);
+
+create table AvisEvenements -- Films et Utilisateurs
+(
+	f_id int,
+	e_id int,
+	mark float not null,
+	commentaire text,
+	primary key(f_id, u_id),
+	foreign key(f_id) references Films(f_id) on delete cascade,
+	foreign key(e_id) references Evenements(e_id) on delete set null,
+	CHECK (notation >=0 AND notation<=5)
 );
 
 
@@ -282,26 +298,18 @@ create table Relations -- Utilisateurs et Utilisateurs
 create table Conversations -- Publications et Publications
 (
 	source int, 
-	reponse int unique,
+	reponse unique int,
+	primary key(source,reponse),
 	foreign key(source) references Publications(p_id) on delete set null,
 	foreign key(reponse) references Publications(p_id) on delete cascade,
 	CHECK (source < reponse)
 );
 
 
-
-create table KeyWords
-(
-	mot varchar(255),
-	primary key(mot)
-);
-
-
-
 create table ComptesArtistes
 (
 	a_id int, 
-	u_id int,
+	u_id int unique,
 	primary key(a_id,u_id),
 	foreign key(a_id) references Artistes(a_id) on delete cascade,
 	foreign key(u_id) references Utilisateurs(u_id) on delete cascade
@@ -321,6 +329,14 @@ create table ComptesEntreprises
 
 
 
+create table KeyWords
+(
+	mot varchar(255),
+	primary key(mot)
+);
+
+
+
 create table ArtistesKeyWords
 (
 	a_id int not null,
@@ -334,7 +350,7 @@ create table ArtistesKeyWords
 
 create table FilmsKeyWords
 (
-	f_id int not null,
+	f_id int,
 	mot varchar(255),
 	primary key(f_id, mot),
 	foreign key(f_id) references Films(f_id) on delete cascade,
@@ -345,12 +361,17 @@ create table FilmsKeyWords
 
 create table EventsKeyWords
 (
-	e_id int not null,
+	e_id int,
 	mot varchar(255),
 	primary key(e_id, mot),
 	foreign key(e_id) references Evenements(e_id) on delete cascade,
 	foreign key(mot) references KeyWords(mot) on delete cascade
 );
+
+create table GenresKeyWords
+(
+	g_id in t
+)
 	
 	
 	
