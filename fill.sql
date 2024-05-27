@@ -181,7 +181,7 @@ INSERT INTO Evenements (nom, debut, fin, prix, lieu, capacite) VALUES
     ('Venice Film Festival', '2024-09-02', '2024-09-12', 220.00, 3, 1800),
     ('Sundance Film Festival', '2025-01-23', '2025-02-02', 120.00, 7, 1500),
     ('Berlin International Film Festival', '2025-02-07', '2025-02-17', 170.00, 8, 2200),
-    ('Dinosaurus Projection', '2025-09-26', '2025-10-12', 190.00, 10, 1800),
+    ('Dinosaurus Projection', '2025-09-26', '2025-10-12', 190.00, 10, 1200),
     ('Tokyo International Film Festival', '2025-10-25', '2025-11-03', 160.00, 1, 900),
     ('London Film Festival', '2025-11-07', '2025-11-17', 150.00, 5, 450),
     ('Hollywood Film Awards', '2025-12-02', '2025-12-10', 210.00, 1, 990);
