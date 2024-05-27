@@ -31,7 +31,7 @@ DROP TYPE IF EXISTS fonctions CASCADE;
 DROP TYPE IF EXISTS emojis CASCADE;
 
 create type attributions as enum ('modérateur', 'admin', 'vip', 'certifié', 'propriétaire');
-create type emojis as enum ('happy', 'sad', 'angry', 'shocked', 'disgusted', 'thumb', 'like', 'lol');
+create type emojis as enum ('happy', 'sad', 'angry', 'shocked', 'disgusted', 'thumbup','thumbdown', 'like', 'lol');
 create type fonctions as enum ('acteur', 'réalisateur', 'producteur');
 
 create table Utilisateurs
@@ -88,7 +88,7 @@ create table Genres
 create table Discussions
 (
 	d_id serial,
-	nom varchar(100) not null,
+	nom varchar(100) unique not null,
 	primary key(d_id)
 );
 
@@ -248,6 +248,7 @@ create table Annonces -- Discussions et Evenements
 (
 	e_id int unique, 
 	d_id int unique, 
+	primary key(e_id, d_id),
 	foreign key(e_id) references Evenements(e_id) on delete cascade,
 	foreign key(d_id) references Discussions(d_id) on delete cascade
 );
