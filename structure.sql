@@ -1,5 +1,5 @@
-CREATE DATABASE CineNet;
-\c CineNet;
+--CREATE DATABASE CineNet;
+--\c CineNet;
 
 DROP TABLE IF EXISTS Utilisateurs CASCADE;
 DROP TABLE IF EXISTS Artistes CASCADE;
@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS ComptesEntreprises CASCADE;
 DROP TABLE IF EXISTS ArtistesKeyWords CASCADE;
 DROP TABLE IF EXISTS FilmsKeyWords CASCADE;
 DROP TABLE IF EXISTS EventsKeyWords CASCADE;
+--DROP TABLE IF EXISTS GenresKeyWords CASCADE;
 DROP TYPE IF EXISTS attributions CASCADE;
 DROP TYPE IF EXISTS fonctions CASCADE;
 DROP TYPE IF EXISTS emojis CASCADE;
@@ -178,13 +179,13 @@ create table AvisFilms -- Films et Utilisateurs
 
 create table AvisEvenements -- Films et Utilisateurs
 (
-	f_id int,
 	e_id int,
-	mark float not null,
+	u_id int,
+	notation float not null,
 	commentaire text,
-	primary key(f_id, u_id),
-	foreign key(f_id) references Films(f_id) on delete cascade,
-	foreign key(e_id) references Evenements(e_id) on delete set null,
+	primary key(e_id, u_id),
+	foreign key(e_id) references Evenements(e_id) on delete cascade,
+	foreign key(u_id) references Utilisateurs(u_id) on delete set null,
 	CHECK (notation >=0 AND notation<=5)
 );
 
@@ -298,7 +299,7 @@ create table Relations -- Utilisateurs et Utilisateurs
 create table Conversations -- Publications et Publications
 (
 	source int, 
-	reponse unique int,
+	reponse int unique,
 	primary key(source,reponse),
 	foreign key(source) references Publications(p_id) on delete set null,
 	foreign key(reponse) references Publications(p_id) on delete cascade,
@@ -368,10 +369,10 @@ create table EventsKeyWords
 	foreign key(mot) references KeyWords(mot) on delete cascade
 );
 
-create table GenresKeyWords
-(
-	g_id in t
-)
+--create table GenresKeyWords
+--(
+	--g_id in t
+--)
 	
 	
 	
