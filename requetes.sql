@@ -96,8 +96,6 @@ FROM notes_max;
 
 ----- AVEC UNE JOINTURE EXTERNE
 -- toutes les entreprises de la base de donnée et leur compte associé si elles en ont un
-SELECT E.nom, CE.u_id
-FROM Entreprises E LEFT JOIN ComptesEntreprises CE ON CE.ent_id = E.ent_id
 
 SELECT E.nom, U.pseudo, CE.u_id
 FROM Utilisateurs U NATURAL JOIN ComptesEntreprises CE RIGHT JOIN Entreprises E ON CE.ent_id=E.ent_id;
@@ -205,6 +203,67 @@ WITH Participation(e_id, nom, lieu, effectif) AS
 SELECT e_id, nom, effectif, lieu, CAST( AVG(effectif) OVER (PARTITION BY lieu) AS DECIMAL(3,2) ) AS moyenne_lieu
 FROM Participation
 ORDER BY lieu;
+
+
+---- VERS UN ALGORITHME DE RECOMMANDATIONS
+
+PREPARE recommandations(INT) AS
+
+WITH 
+followed_artist AS 
+(
+	SELECT C.a_id
+	FROM ComptesArtistes C, Relations R
+	WHERE R.followed = C.u_id 
+	AND R.follower = $1
+),
+
+films_from_followed_artists AS
+(
+	SELECT DISTINCT F.f_id
+	FROM Films F NATURAL JOIN followed_artist
+),
+films_liked_by_friends AS
+(
+	SELECT F.f_id
+	FROM Films F NATURAL JOIN AvisFilms 
+	WHERE A.u_id IN (SELECT u_id1 FROM Amis WHERE u_id2 = $1)
+	OR A.u_id IN (SELECT u_id2 FROM Amis WHERE u_id1 = $1)
+	AND A.notation >= 4
+),
+films_from_events_liked_by_friends AS
+(
+	SELECT F.f_id
+	FROM Films F NATURAL JOIN Programmes P NATURAL JOIN Evenements E NATURAL JOIN AvisEvenements A
+	WHERE A.u_id IN (SELECT u_id1 FROM Amis WHERE u_id2 = $1)
+	OR A.u_id IN (SELECT u_id2 FROM Amis WHERE u_id1 = $1)
+	AND A.notation >= 4
+)
+SELECT Films.f_id, Films.f_titre,
+	(CASE 
+		WHEN followed_artists.a_id IS NOT NULL THEN 1.0
+		ELSE 0.0
+	END +
+	CASE 
+		WHEN films_from_followed_artists.f_id IS NOT NULL THEN 1.0
+		ELSE 0.0
+	END +
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	)
+
 
 
 
