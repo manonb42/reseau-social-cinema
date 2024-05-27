@@ -1,5 +1,5 @@
 -- ÉVENEMENT PASSÉ DANS ARCHIVES 
-CREATE OR REPLACE FUNCTION fin_evenement() 
+CREATE OR REPLACE FUNCTION evenement_passe_archive() 
 RETURNS TRIGGER AS $$
 DECLARE
     event_fin DATE;
@@ -16,17 +16,17 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_fin_evenement
+CREATE TRIGGER trigger_evenement_passe_archive
 BEFORE INSERT ON Archives
 FOR EACH ROW
-EXECUTE FUNCTION fin_evenement();
+EXECUTE FUNCTION evenement_passe_archive();
 
 
 
 
 
 -- ÉVENEMENT FUTUR DANS PROGRAMME
-CREATE OR REPLACE FUNCTION debut_evenement()
+CREATE OR REPLACE FUNCTION evenement_futur_programme()
 RETURNS TRIGGER AS $$
 DECLARE
     debut_ev DATE;
@@ -42,16 +42,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_debut_evenement
+CREATE TRIGGER trigger_evenement_futur_programme
 BEFORE INSERT ON Programmes
-FOR EACH ROW EXECUTE FUNCTION debut_evenement();
+FOR EACH ROW EXECUTE FUNCTION evenement_futur_programme();
 
 
 
 
 
 -- CAPACITÉ DU LIEU >= CAPACITÉ DE L'ÉVENEMENT
-CREATE OR REPLACE FUNCTION capacite_lieu()
+CREATE OR REPLACE FUNCTION capacite_lieu_evenement()
 RETURNS TRIGGER AS $$
 BEGIN
     IF (SELECT capacite FROM Lieux WHERE l_id = NEW.lieu) < NEW.capacite THEN
@@ -61,9 +61,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_capacite_lieu
+CREATE TRIGGER trigger_capacite_lieu_evenement
 BEFORE INSERT OR UPDATE ON Evenements
-FOR EACH ROW EXECUTE FUNCTION capacite_lieu();
+FOR EACH ROW EXECUTE FUNCTION capacite_lieu_evenement();
 
 
 
@@ -72,7 +72,7 @@ FOR EACH ROW EXECUTE FUNCTION capacite_lieu();
 
 -- DANS PARTICIPANTS : LE NOMBRE D'INSCRITS EST <= A LA CAPACITÉ DE EVENEMENTS
 
-CREATE OR REPLACE FUNCTION verifie_capacite()
+CREATE OR REPLACE FUNCTION capacite_evements_participants()
 RETURNS TRIGGER AS $$
 DECLARE
     capacite_event INT;
@@ -102,7 +102,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
+CREATE TRIGGER trigger_capacite_evements_participants
+BEFORE INSERT OR UPDATE ON Participants
+FOR EACH ROW
+EXECUTE FUNCTION capacite_evements_participants();
 
 
 
@@ -210,7 +213,7 @@ EXECUTE FUNCTION superposition_evenements();
 
 -- L'UTILISATEUR NE MET UN AVIS SUR UN EVENEMENT QUE SI IL EST INSCRIT A L'EVENEMENT ET QUE L'EVENEMENT EST PASSE 
 
-CREATE OR REPLACE FUNCTION verification_etat_avis_evenement()
+CREATE OR REPLACE FUNCTION etat_avis_evenement()
 RETURNS TRIGGER AS $$
 BEGIN
     -- On vérifie si l'utilisateur a participé à l'événement
@@ -240,4 +243,4 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_etat_avis
 BEFORE INSERT OR UPDATE ON AvisEvenements
 FOR EACH ROW
-EXECUTE FUNCTION verification_etat_avis_evenement();
+EXECUTE FUNCTION etat_avis_evenement();
