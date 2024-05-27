@@ -204,3 +204,40 @@ CREATE TRIGGER trigger_superposition
 BEFORE INSERT OR UPDATE ON Evenements
 FOR EACH ROW
 EXECUTE FUNCTION superposition_evenements();
+
+
+
+
+-- L'UTILISATEUR NE MET UN AVIS SUR UN EVENEMENT QUE SI IL EST INSCRIT A L'EVENEMENT ET QUE L'EVENEMENT EST PASSE 
+
+CREATE OR REPLACE FUNCTION verification_etat_avis_evenement()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- On vérifie si l'utilisateur a participé à l'événement
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM Participants 
+        WHERE Participants.u_id = NEW.u_id
+        AND Participants.e_id = NEW.e_id
+    ) THEN
+        RETURN NULL;
+    END IF;
+
+    -- On vérifie si l'événement est passé
+    IF NOT EXISTS (
+        SELECT 1
+        FROM Evenements
+        WHERE Evenements.e_id = NEW.e_id
+        AND Evenements.fin < CURRENT_DATE
+    ) THEN
+        RETURN NULL;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_etat_avis
+BEFORE INSERT OR UPDATE ON AvisEvenements
+FOR EACH ROW
+EXECUTE FUNCTION verification_etat_avis_evenement();
