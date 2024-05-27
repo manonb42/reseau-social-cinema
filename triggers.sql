@@ -16,7 +16,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER check_event_end_date_trigger
+CREATE TRIGGER trigger_event_end_date
 BEFORE INSERT ON Archives
 FOR EACH ROW
 EXECUTE FUNCTION check_event_end_date();
@@ -33,7 +33,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_check_event_capacity
+CREATE TRIGGER trigger_event_capacity
 BEFORE INSERT OR UPDATE ON Evenements
 FOR EACH ROW EXECUTE FUNCTION check_event_capacity();
 
@@ -55,6 +55,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_check_event_start_date
+CREATE TRIGGER trigger_event_start_date
 BEFORE INSERT ON Programmes
 FOR EACH ROW EXECUTE FUNCTION check_event_start_date();
