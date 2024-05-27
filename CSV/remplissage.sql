@@ -132,11 +132,11 @@ SELECT u_id, d_id, date_publication, contenu FROM Publications_temp;
 \COPY Conversations FROM 'CSV/conversations.csv' WITH CSV;
 \COPY ComptesArtistes FROM 'CSV/comptesartistes.csv' WITH CSV;
 \COPY ComptesEntreprises FROM 'CSV/comptesentreprises.csv' WITH CSV;
---\COPY KeyWords FROM 'CSV/keywords.csv' WITH CSV;
---\COPY ArtistesKeyWords FROM 'CSV/artisteskeywords.csv' WITH CSV;
---\COPY FilmsKeyWords FROM 'CSV/filmskeywords.csv' WITH CSV;
---\COPY EventsKeyWords FROM 'CSV/eventskeywords.csv' WITH CSV;
---\COPY GenresKeyWords FROM 'CSV/genreskeywords.csv' WITH CSV;
+\COPY KeyWords FROM 'CSV/keywords.csv' WITH CSV;
+\COPY ArtistesKeyWords FROM 'CSV/artisteskeywords.csv' WITH CSV;
+\COPY FilmsKeyWords FROM 'CSV/filmskeywords.csv' WITH CSV;
+\COPY EventsKeyWords FROM 'CSV/eventskeywords.csv' WITH CSV;
+\COPY GenresKeyWords FROM 'CSV/genreskeywords.csv' WITH CSV;
 
 
 DROP TABLE IF EXISTS Utilisateurs_temp;
