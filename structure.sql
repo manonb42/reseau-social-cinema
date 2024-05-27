@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS ComptesEntreprises CASCADE;
 DROP TABLE IF EXISTS ArtistesKeyWords CASCADE;
 DROP TABLE IF EXISTS FilmsKeyWords CASCADE;
 DROP TABLE IF EXISTS EventsKeyWords CASCADE;
---DROP TABLE IF EXISTS GenresKeyWords CASCADE;
+DROP TABLE IF EXISTS GenresKeyWords CASCADE;
 DROP TYPE IF EXISTS attributions CASCADE;
 DROP TYPE IF EXISTS fonctions CASCADE;
 DROP TYPE IF EXISTS emojis CASCADE;
@@ -96,8 +96,6 @@ create table Discussions
 	theme varchar(100) unique not null,
 	primary key(d_id)
 );
-
-
 
 create table Lieux
 (
@@ -240,12 +238,10 @@ create table Participants -- Utilisateurs et Evenements
 (
 	e_id int, 
 	u_id int,
-	interesse boolean not null,
 	inscrit boolean not null, 
 	primary key(e_id,u_id),
 	foreign key(e_id) references Evenements(e_id) on delete cascade,
-	foreign key(u_id) references Utilisateurs(u_id) on delete cascade,
-	CHECK (interesse <> inscrit)
+	foreign key(u_id) references Utilisateurs(u_id) on delete cascade
 );
 
 
@@ -321,7 +317,7 @@ create table ComptesArtistes
 create table ComptesEntreprises
 (
 	ent_id int, 
-	u_id int,
+	u_id int unique,
 	primary key(ent_id,u_id),
 	foreign key(ent_id) references Entreprises(ent_id) on delete cascade,
 	foreign key(u_id) references Utilisateurs(u_id) on delete cascade
@@ -369,12 +365,11 @@ create table EventsKeyWords
 	foreign key(mot) references KeyWords(mot) on delete cascade
 );
 
---create table GenresKeyWords
---(
-	--g_id in t
---)
-	
-	
-	
-	
-
+create table GenresKeyWords
+(
+	g_id int,
+	mot varchar(255),
+	primary key(g_id, mot),
+	foreign key(g_id) references Genres(g_id) on delete cascade,
+	foreign key(mot) references KeyWords(mot) on delete cascade
+);

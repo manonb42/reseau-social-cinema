@@ -25,7 +25,7 @@ INSERT INTO Utilisateurs (pseudo, email, nom, prenom, mdp, birth, pays, biograph
     ('wwenders', 'wwenders@example.com', 'Wenders', 'Wim', 'wim123', '1945-08-14', 'Allemagne', 'Réalisateur allemand, connu pour ses films expérimentaux et sa maîtrise du cinéma d''auteur.', 'vip'),
     ('acuaron', 'acuaron@example.com', 'Cuarón', 'Alfonso', 'cuaron123', '1961-11-28', 'Mexique', 'Réalisateur mexicain primé aux Oscars, célèbre pour des films tels que "Gravity" et "Roma".', 'certifié'),
     ('daronofsky', 'daronofsky@example.com', 'Aronofsky', 'Darren', 'darren123', '1969-02-12', 'États-Unis', 'Réalisateur américain réputé pour ses films provocateurs et psychologiques.', 'modérateur'),
-    ('agiñarritu', 'agiñarritu@example.com', 'Inarritu', 'Alejandro González', 'alejandro123', '1963-08-15', 'Mexique', 'Réalisateur mexicain primé aux Oscars, connu pour ses films dramatiques et puissants.', 'modérateur'),
+    ('aginarritu', 'aginarritu@example.com', 'Inarritu', 'Alejandro González', 'alejandro123', '1963-08-15', 'Mexique', 'Réalisateur mexicain primé aux Oscars, connu pour ses films dramatiques et puissants.', 'modérateur'),
     ('dchazelle', 'dchazelle@example.com', 'Chazelle', 'Damien', 'damien123', '1985-01-19', 'États-Unis', 'Réalisateur américain, le plus jeune à remporter un Oscar du meilleur réalisateur pour "La La Land".', 'vip'),
     ('ahitchcock', 'ahitchcock@example.com', 'Hitchcock', 'Alfred', 'alfred123', '1899-08-13', 'Royaume-Uni', 'Réalisateur britannique légendaire, maître du suspense et du thriller.', 'modérateur'),
     ('ffellini', 'ffellini@example.com', 'Fellini', 'Federico', 'federico123', '1920-01-20', 'Italie', 'Réalisateur italien célèbre pour ses films surrealistes et fantasques.', 'certifié'),
