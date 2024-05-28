@@ -1,5 +1,5 @@
---CREATE DATABASE CineNet;
---\c CineNet;
+--CREATE DATABASE CinemaNet;
+--\c CinemaNet;
 
 DROP TABLE IF EXISTS Utilisateurs CASCADE;
 DROP TABLE IF EXISTS Artistes CASCADE;

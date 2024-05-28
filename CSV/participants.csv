@@ -10,7 +10,7 @@
 5,10,true
 10,21,false
 10,22,true
-1,23,false
+1,23,true
 6,24,true
 7,25,true
 8,26,false
@@ -23,8 +23,8 @@
 7,3,true
 7,4,false
 7,5,true
-1,6,false
-2,7,false
+1,6,true
+2,7,true
 7,8,true
 7,9,true
 7,10,false

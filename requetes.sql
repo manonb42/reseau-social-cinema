@@ -1,27 +1,59 @@
------ REQUETES SUR AU MOINS 3 TABLES
--- films qui ont reçu la notation 5/5 par au moins un utilisateur certifié
-SELECT DISTINCT F.f_id, F.titre
-FROM Utilisateurs U NATURAL JOIN AvisFilms A NATURAL JOIN Films F
-WHERE A.mark = 5 
-AND U.attribution= 'certifié';
-
-
------ REQUETES AVEC UNE AUTOJOINTURE
-
---selectionne les couples d'utilisateurs qui sont amis
-CREATE VIEW Amis (u_id1, u_id2) AS
+--Les couples d’utilisateurs qui sont amis. Sans doublons ni couples symétriques et avec création d’une vue.
+CREATE VIEW Amis (id1, pseudo1, id2, pseudo2) AS
 (
-SELECT U1.pseudo, U2.pseudo
+SELECT U1.u_id, U1.pseudo, U2.u_id, U2.pseudo
 FROM Relations R1, Relations R2, Utilisateurs U1, Utilisateurs U2
 WHERE R1.follower = R2.followed AND R1.followed = R2.follower
 AND R1.follower < R1.followed
 AND U1.u_id = R1.follower AND U2.u_id=R1.followed
 );
 
---l'utilisateur qui a le plus d'amis
+--Les couples d'id d'utilisateurs qui ne sont pas amis mais qui ont au moins un amis en commun 
+SELECT U1.u_id, U2.u_id 
+FROM Utilisateurs U1, Utilisateurs U2 
+WHERE U1.u_id NOT IN (SELECT A.id1 FROM Amis A WHERE A.id2=U2.u_id
+					UNION SELECT A.id2 FROM Amis A WHERE A.id1=U2.u_id)
+AND EXISTS (
+				SELECT * FROM Amis A1
+				WHERE 
+						A1.id1=U1.u_id AND A1.id2 IN (SELECT id1 FROM Amis A WHERE A.id2=U2.u_id
+													UNION SELECT id2 FROM Amis A WHERE A.id1=U2.u_id)
+						OR 
+						A1.id2=U1.u_id AND A1.id1 IN (SELECT A.id1 FROM Amis A WHERE A.id2=U2.u_id
+													UNION SELECT A.id2 FROM Amis A WHERE A.id1=U2.u_id)
+)
+AND U1.u_id < U2.u_id;
+
+--L’utilisateur le plus suivi.
+WITH nb_followers AS 
+(
+	SELECT R.followed AS user, COUNT(*) AS total
+	FROM Relations R
+	GROUP BY R.followed
+
+	UNION 
+
+	SELECT U.u_id, 0
+	FROM Utilisateurs U
+	WHERE U.u_id NOT IN (SELECT followed FROM Relations)
+) 
+SELECT U.pseudo, nb_followers.total
+FROM nb_followers, Utilisateurs U
+WHERE U.u_id = nb_followers.user
+AND nb_followers.total >= ALL(SELECT total FROM nb_followers);
 
 
--- artistes qui ont été à la fois acteur et réalisateur d'un même film
+
+----- REQUETES SUR AU MOINS 3 TABLES
+-- Les films ayant reçu la note de 5/5 par un utilisateur certifié.
+SELECT DISTINCT F.f_id, F.titre
+FROM Utilisateurs U NATURAL JOIN AvisFilms A NATURAL JOIN Films F
+WHERE A.notation = 5 
+AND U.attribution= 'certifié';
+
+
+----- REQUETES AVEC UNE AUTOJOINTURE
+-- Les artistes ayant joué dans un film qu’ils ont eux même réalisé, avec les films concernés.
 SELECT DISTINCT A.nom, A.prenom, F.titre
 FROM Artistes A, Staff S1, Staff S2, Films F
 WHERE A.a_id = S1.a_id AND A.a_id = S2.a_id AND S1.f_id = F.f_ID AND S2.f_id = F.f_id
@@ -30,7 +62,7 @@ AND S2.fonction = 'réalisateur';
 
 
 ----- AVEC SOUS REQUETE DANS LE FROM
--- films diffusés dans des événements à plus de 50€
+-- Les films diffusés dans des événements à plus de 200€,
 SELECT  F.f_id, F.titre
 FROM 	
 	(
@@ -41,7 +73,7 @@ FROM
 
 
 ----- AVEC SOUS REQUETE DANS LE WHERE
--- films diffusés dans des événements à plus de 50€
+-- Les films diffusés dans des événements à plus de 200€,
 SELECT F.f_id, F.titre
 FROM Films F
 WHERE F.f_id IN 
@@ -52,7 +84,7 @@ WHERE F.f_id IN
 
 
 ----- AVEC SOUS REQUETE CORRELEE
--- utilisateurs qui ont fait deux publications à moins d'une minute d'intervalle
+-- Les utilisateurs ayant fait deux publications à moins d’une minute d’intervalle.
 SELECT U.pseudo
 FROM Utilisateurs U 
 WHERE EXISTS 
@@ -68,25 +100,26 @@ WHERE EXISTS
 
 
 ----- AVEC GROUP BY ET HAVING
--- les publications qui comptent au moins 5 coeurs
+-- Les publications qui comptent au moins 5 likes.
 SELECT R.p_id, COUNT(*)
 FROM Reactions R
 WHERE R.emoji = 'like'
 GROUP BY R.p_id
 HAVING COUNT(*) >= 5;
 
---les films dont la note moyenne individuelle est superieure à la note moyenne générale de toute la table
-SELECT A.f_id, CAST(SUM(A.mark)/COUNT(*) AS DECIMAL(3,2)) AS moyenne_individuelle
+-- Les films dont la moyenne des notes est supérieure à la moyenne générale de tous les films confondus.
+SELECT A.f_id, CAST(AVG(A.notation) AS DECIMAL(3,2)) AS moyenne_individuelle
 FROM AvisFilms A
 GROUP BY A.f_id
-HAVING SUM(A.mark)/COUNT(*) >= (SELECT SUM(mark)/COUNT(*) FROM AvisFilms);
+HAVING AVG(A.notation) >= (SELECT AVG(notation) FROM AvisFilms)
+ORDER BY moyenne_individuelle;
 
 
 ----- AVEC CALCUL DE DEUX AGRÉGATS
--- la moyenne des notes maximales attribuées aux films
+-- La moyenne des notes maximales attribuées aux films.
 WITH notes_max AS
 (
-SELECT A.f_id, MAX(A.mark) AS note
+SELECT A.f_id, MAX(A.notation) AS note
 FROM AvisFilms A 
 GROUP BY A.f_id
 )
@@ -95,7 +128,7 @@ FROM notes_max;
 
 
 ----- AVEC UNE JOINTURE EXTERNE
--- toutes les entreprises de la base de donnée et leur compte associé si elles en ont un
+-- La liste de toutes les entreprises, et s’ils existent, les comptes qui leur sont associés.
 
 SELECT E.nom, U.pseudo, CE.u_id
 FROM Utilisateurs U NATURAL JOIN ComptesEntreprises CE RIGHT JOIN Entreprises E ON CE.ent_id=E.ent_id;
@@ -114,6 +147,7 @@ AND NOT EXISTS (
 				AND S1.a_id=S.a_id AND F1.titre NOT LIKE 'The%'
 				);
 
+-- realisateurs dont tous les films commencent par le mot 'The'
 SELECT A.a_id, A.prenom, A.nom, F2.titre
 FROM
 	(
@@ -161,22 +195,23 @@ WHERE U.birth IS NOT NULL
 AND NOT EXISTS (SELECT * FROM Utilisateurs U1 WHERE U1.birth < U.birth);
 
 
------ REQUETE RECURSIVE 
---tous les couples de publications qui ont un lien de parenté vertical 
+----- REQUETES RECURSIVES
+-- Les couples de publications ayant un lien de parenté vertical plus ou moins éloigné. 
 WITH RECURSIVE FilConversation(source,reponse) AS
 (
 	SELECT * FROM Conversations 
-	UNION  -- ou UNION ALL ?
+	UNION  
 	SELECT C.source, F.reponse
 	FROM Conversations C, FilConversation F
 	WHERE C.reponse = F.source
 ) 
 SELECT * FROM FilConversation;
 
+-- Les couples de genres qui ont un lien de parenté vertical plus ou moins éloigné.
 WITH RECURSIVE GenealogieDesGenres(genre,sousgenre) AS
 (
 	SELECT * FROM GenresParents
-	UNION  -- ou UNION ALL ?
+	UNION  
 	SELECT GP.genre, GG.sousgenre
 	FROM GenresParents GP, GenealogieDesGenres GG
 	WHERE GP.sousgenre = GG.genre
@@ -187,20 +222,35 @@ AND G2.g_id=G.sousgenre;
 
 
 ----- REQUETE AVEC FENETRAGE
+-- Pour chaque événement passé, son nombre de participants
+-- comparé à la moyenne des effectifs des événements ayant eu lieu au même endroit.
 
 WITH Participation(e_id, nom, lieu, effectif) AS
 ( 	
+	(
+	(
 	SELECT Total.e_id, E.nom, E.lieu, Total.effectif
 	FROM
-		( 
+		(
 		SELECT P.e_id, COUNT(*) AS effectif
 		FROM Participants P
 		WHERE inscrit
 		GROUP BY P.e_id
 		) AS Total NATURAL JOIN Evenements E
+		WHERE E.fin < NOW()
+	)
+	UNION 
+
+	SELECT E.e_id, E.nom, E.lieu, 0
+	FROM Evenements E
+	WHERE E.fin < NOW()
+	AND E.e_id NOT IN (SELECT e_id FROM Participants)
+	
+	)
+
 )
 
-SELECT e_id, nom, effectif, lieu, CAST( AVG(effectif) OVER (PARTITION BY lieu) AS DECIMAL(3,2) ) AS moyenne_lieu
+SELECT lieu, e_id, nom, effectif, CAST( AVG(effectif) OVER (PARTITION BY lieu) AS DECIMAL(3,2) ) AS moyenne_lieu
 FROM Participation
 ORDER BY lieu;
 
