@@ -255,9 +255,6 @@ FROM Participation
 ORDER BY lieu;
 
 
----- VERS UN ALGORITHME DE RECOMMANDATIONS
-
-
 
 
 

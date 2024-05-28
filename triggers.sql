@@ -244,3 +244,22 @@ CREATE TRIGGER trigger_etat_avis
 BEFORE INSERT OR UPDATE ON AvisEvenements
 FOR EACH ROW
 EXECUTE FUNCTION etat_avis_evenement();
+
+
+
+-- POUR S'INSCRIRE A UN EVENEMENT IL FAUT QUE L'EVENEMENT L'AIT PAS ENCORE COMMENCÉ
+CREATE OR REPLACE FUNCTION evenement_futur_participants()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Vérifier si l'évènement a déjà commencé
+    IF (SELECT debut FROM Evenements WHERE e_id = NEW.e_id) <= CURRENT_DATE THEN
+        RETURN NULL;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_evenement_futur_participants
+BEFORE INSERT ON Participants
+FOR EACH ROW
+EXECUTE FUNCTION evenement_futur_participants();
